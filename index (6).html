@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <title>دراسة علمية — الإدراك البصري</title>
+  <link rel="icon" type="image/x-icon" href="logo.png">
+  <style>
+    /* ====== Styles complets (inchangés) ====== */
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&family=Share+Tech+Mono&display=swap');
+    :root {
+      --bg: #0b0f0d; --bg2: #101510; --card: #131a14; --border: #1e2e20;
+      --neon: #00ff88; --neon-d: #00cc6a; --white: #ffffff; --text: #e8f0e9;
+      --dim: #7a9a7e; --accent: #ffd54f; --red: #ff4444; --green: #3A6B45;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      background: var(--bg); color: var(--text); font-family: 'Tajawal', sans-serif;
+      min-height: 100vh; direction: rtl; overflow-x: hidden
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,255,136,.006) 3px, rgba(0,255,136,.006) 4px);
+      pointer-events: none; z-index: 1
+    }
+    #trans { position: fixed; inset: 0; background: var(--bg); z-index: 900; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .35s; }
+    #trans.show { opacity: 1; pointer-events: all; }
+    #trans span { font-family: 'Share Tech Mono', monospace; color: var(--neon); font-size: 13px; letter-spacing: 4px; }
+    .app { max-width: 900px; margin: 0 auto; padding: 24px 20px; position: relative; z-index: 2 }
+    .hdr { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 36px }
+    .hdr-logo { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim) }
+    .dots { display: flex; gap: 7px }
+    .dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--border); background: transparent; transition: all .3s }
+    .dot.done { background: #4caf50; border-color: #4caf50; box-shadow: 0 0 6px #4caf50 }
+    .dot.active { background: var(--neon); border-color: var(--neon); box-shadow: 0 0 8px var(--neon) }
+    .screen { display: none }
+    .screen.active { display: block; animation: fadeUp .4s ease }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
+    .lbl { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--neon); opacity: .65; margin-bottom: 14px }
+    h1 { font-size: clamp(24px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 18px; background: linear-gradient(135deg, var(--text), var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent }
+    h2 { font-size: clamp(18px,3vw,26px); font-weight: 700; margin-bottom: 14px; color: var(--text) }
+    h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text) }
+    p { font-size: 15px; line-height: 1.8; color: var(--dim); margin-bottom: 12px }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 16px }
+    .card-g { border-color: rgba(0,255,136,.3); box-shadow: 0 0 20px rgba(0,255,136,.07) }
+    .btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg,#2E7D32,#1B5E20); color: #fff; padding: 13px 32px; font-size: 15px; font-weight: 700; font-family: 'Tajawal', sans-serif; border: none; cursor: pointer; border-radius: 8px; transition: all .2s; box-shadow: 0 0 0 rgba(0,255,136,0) }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 24px rgba(0,255,136,.3) }
+    .btn:active { transform: translateY(0) }
+    .btn-g { background: linear-gradient(135deg,#2E7D32,#1B5E20) }
+    .btn-lg { padding: 15px 44px; font-size: 16px }
+    .btn:disabled { opacity: .35; cursor: not-allowed; transform: none !important; box-shadow: none !important }
+    .btn-out { background: transparent; color: var(--dim); border: 1px solid var(--border) }
+    .btn-out:hover { border-color: var(--text); color: var(--text); box-shadow: none; transform: none }
+    hr.dv { border: none; border-top: 1px solid var(--border); margin: 20px 0 }
+    .consent-list { list-style: none; padding: 0; margin: 0 }
+    .consent-list li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.75; color: var(--dim) }
+    .consent-list li:last-child { border-bottom: none }
+    .consent-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--neon); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; font-family: 'Share Tech Mono', monospace; margin-top: 2px }
+    .cvwrap { position: relative; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); max-width: 800px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,.6) }
+    canvas { display: block; width: 100%; height: auto }
+    /* HUD drawn directly on canvas */
+    .cbadge { position: absolute; top: 10px; right: 10px; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: 2px }
+    .flabel { font-size: 12px; font-weight: 700; letter-spacing: .5px; color: var(--dim); margin-bottom: 10px; display: block; text-transform: uppercase; font-family: 'Share Tech Mono', monospace }
+    .fopts { display: flex; flex-wrap: wrap; gap: 8px }
+    .fopt { padding: 9px 18px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; background: var(--bg2); transition: all .15s; color: var(--dim); font-family: 'Tajawal', sans-serif }
+    .fopt:hover { border-color: var(--neon); color: var(--neon); background: rgba(0,255,136,.06) }
+    .fopt.sel { background: rgba(0,255,136,.15); color: var(--neon); border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,136,.15) }
+    .litem { border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 10px; background: var(--card); transition: border-color .2s, box-shadow .2s }
+    .litem.ok { border-color: rgba(0,255,136,.4); box-shadow: 0 0 14px rgba(0,255,136,.08) }
+    .lscale { display: flex; gap: 5px; direction: ltr; justify-content: center; flex-wrap: wrap }
+    .lbtn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s; color: var(--dim); font-family: 'Share Tech Mono', monospace }
+    .lbtn:hover { border-color: var(--neon); color: var(--neon); background: rgba(0,255,136,.08) }
+    .lbtn.sel { background: rgba(0,255,136,.2); color: var(--neon); border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,136,.2) }
+    .llabels { display: flex; justify-content: space-between; direction: ltr; font-size: 9px; color: var(--dim); margin-top: 6px; padding: 0 3px; font-family: 'Share Tech Mono', monospace }
+    .mc-opts { display: flex; flex-direction: column; gap: 8px; margin-top: 10px }
+    .mc-opt { padding: 12px 18px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; background: var(--bg2); transition: all .15s; color: var(--dim); text-align: right; font-family: 'Tajawal', sans-serif }
+    .mc-opt:hover { border-color: var(--neon); color: var(--neon); background: rgba(0,255,136,.06) }
+    .mc-opt.sel { background: rgba(0,255,136,.15); color: var(--neon); border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,136,.12) }
+    .mc-sep { border: none; border-top: 1px solid var(--border); margin: 28px 0 20px; position: relative }
+    .mc-sep::after { content: 'Manipulation Checks'; position: absolute; top: -9px; right: 50%; transform: translateX(50%); background: var(--bg); padding: 0 10px; font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--neon); opacity: .6 }
+    .dshapes { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 28px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 18px; min-height: 110px }
+    .ds { width: 40px; height: 40px; opacity: 0; animation: pop .3s ease forwards }
+    .ds-sq { background: #9E9E9E }
+    .ds-tri { width: 0; height: 0; background: transparent; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 35px solid #9E9E9E }
+    .ds-star { background: #9E9E9E; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%) }
+    @keyframes pop { from { opacity: 0; transform: scale(.4) } to { opacity: 1; transform: scale(1) } }
+    .dinput { width: 100%; max-width: 180px; padding: 11px 14px; font-size: 17px; border: 1px solid var(--border); border-radius: 8px; text-align: center; font-family: 'Share Tech Mono', monospace; background: var(--bg2); color: var(--text); direction: ltr; display: block; margin: 0 auto 14px }
+    .dinput:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,136,.2) }
+    .cbar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 8px }
+    .cfill { height: 100%; background: var(--neon); transition: width .1s linear; box-shadow: 0 0 6px rgba(0,255,136,.4) }
+    textarea { width: 100%; min-height: 130px; padding: 14px; font-size: 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Tajawal', sans-serif; background: var(--bg2); color: var(--text); resize: vertical; direction: rtl; line-height: 1.7 }
+    textarea:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,136,.15) }
+    .send-icon { font-size: 44px; display: block; text-align: center; margin-bottom: 14px }
+    .sdot { width: 11px; height: 11px; border-radius: 50%; background: var(--neon); margin: 8px auto 0; animation: pulse 1.2s infinite; box-shadow: 0 0 8px var(--neon) }
+    @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .2 } }
+    #flash { position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 9999; transition: opacity .08s }
+    @media(max-width:600px){
+      /* ── Layout ── */
+      .app { padding: 16px 14px; }
+      .hdr { margin-bottom: 22px; padding: 10px 0; }
+      .hdr-logo { font-size: 8px; letter-spacing: 1px; }
+
+      /* ── Typography ── */
+      h1 { font-size: 26px; margin-bottom: 14px; }
+      h2 { font-size: 19px; margin-bottom: 10px; }
+      h3 { font-size: 15px; }
+      p  { font-size: 14px; }
+
+      /* ── Cards ── */
+      .card { padding: 14px 16px; margin-bottom: 12px; border-radius: 10px; }
+      .db-card { padding: 20px 18px; border-radius: 12px; }
+
+      /* ── Buttons ── */
+      .btn { padding: 12px 22px; font-size: 14px; width: 100%; justify-content: center; }
+      .btn-lg { padding: 14px 22px; font-size: 15px; }
+      .btn-out { width: auto; }
+      .btn-debrief { width: 100%; justify-content: center; padding: 13px 20px; font-size: 14px; }
+      .db-nav { justify-content: center; }
+
+      /* ── Demographic options ── */
+      .fopts { gap: 7px; }
+      .fopt { padding: 9px 14px; font-size: 13px; flex: 1 1 auto; text-align: center; min-width: calc(50% - 4px); }
+
+      /* ── Likert scale — key fix: make buttons fill row ── */
+      .lscale { gap: 4px; justify-content: space-between; flex-wrap: nowrap; }
+      .lbtn { width: calc((100% - 24px) / 7); min-width: 32px; height: 36px; border-radius: 6px; font-size: 12px; flex-shrink: 0; }
+      .llabels { font-size: 8px; }
+
+      /* ── Question item ── */
+      .litem { padding: 14px 14px; }
+      .lq { font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+      .lq-text { font-size: 14px; }
+
+      /* ── MC options ── */
+      .mc-opt { padding: 11px 14px; font-size: 13px; }
+      .mc-sep::after { font-size: 8px; letter-spacing: 1px; }
+
+      /* ── Consent list ── */
+      .consent-list li { gap: 10px; padding: 12px 0; font-size: 13px; }
+      .consent-num { width: 22px; height: 22px; font-size: 11px; flex-shrink: 0; }
+
+      /* ── Debrief ── */
+      .db-title { font-size: 20px; }
+      .db-text { font-size: 14px; }
+      .db-pip { width: 12px; height: 12px; }
+      .db-progress { gap: 10px; margin-bottom: 20px; }
+      .db-nav { margin-top: 16px; }
+      .flip-container { height: auto; min-height: 110px; }
+      .flip-face { padding: 14px; }
+      .flip-text { font-size: 13px; }
+
+      /* ── Admin panel ── */
+      #adm-panel { width: calc(100vw - 20px); right: 10px; bottom: 10px; left: 10px; max-height: 75vh; }
+
+      /* ── Tooltip — full-width fixed bubble on mobile ── */
+      .tip-wrap { position: static; display: inline; }
+      .tip-bubble {
+        position: fixed !important;
+        bottom: 16px !important; top: auto !important;
+        left: 12px !important; right: 12px !important;
+        width: auto !important; max-width: none !important; min-width: 0 !important;
+        transform: translateY(8px);
+        font-size: 13px; padding: 12px 16px;
+        border-radius: 12px;
+        z-index: 9000;
+      }
+      .tip-bubble::after, .tip-bubble::before { display: none; }
+      .tip-wrap:hover .tip-bubble { opacity: 0; transform: translateY(8px); }
+      .tip-wrap .tip-bubble.tip-show { opacity: 1 !important; transform: translateY(0) !important; }
+      .tip-icon { width: 20px; height: 20px; font-size: 11px; margin-right: 0; margin-left: 6px; vertical-align: middle; }
+
+      /* ── Animation screen ── */
+      .cvwrap { border-radius: 8px; }
+      #s-anim h2 { font-size: 15px; margin-bottom: 8px; }
+
+      /* ── Distractor ── */
+      .dshapes { padding: 18px; gap: 10px; }
+      .ds { width: 34px; height: 34px; }
+
+      /* ── Send screen ── */
+      .send-icon { font-size: 36px; }
+    }
+
+    /* ====== DEMO SCREEN STYLES ====== */
+    .demo-card { margin-bottom: 14px; transition: border-color .25s, box-shadow .25s; }
+    .demo-card.dc-done { border-color: rgba(0,255,136,.4); box-shadow: 0 0 16px rgba(0,255,136,.08); }
+    .demo-sub { font-size: 12px; color: var(--dim); margin-bottom: 12px; margin-top: -6px; }
+    .demo-input {
+      width: 100%; padding: 12px 16px; font-size: 15px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--bg2); color: var(--text);
+      font-family: 'Tajawal', sans-serif; direction: rtl;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .demo-input:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,136,.18); }
+    .demo-input-num { max-width: 160px; text-align: center; direction: ltr; font-family: 'Share Tech Mono', monospace; font-size: 20px; }
+    .demo-bubble {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px; padding: 7px 14px;
+      background: rgba(0,255,136,.09); border: 1px solid rgba(0,255,136,.3);
+      border-radius: 20px; font-size: 13px; color: var(--neon);
+      font-family: 'Tajawal', sans-serif; font-weight: 600;
+      opacity: 0; transform: translateY(5px);
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none; min-height: 0; overflow: hidden;
+      max-height: 0; padding-top: 0; padding-bottom: 0; margin-top: 0;
+    }
+    .demo-bubble.show {
+      opacity: 1; transform: translateY(0);
+      max-height: 60px; padding: 7px 14px; margin-top: 10px;
+    }
+
+    /* ====== DEBRIEF STYLES ====== */
+    .db-screen { display: none; animation: dbFadeIn .6s ease }
+    .db-screen.db-active { display: block }
+    @keyframes dbFadeIn { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+    .db-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px 40px; margin-bottom: 20px; position: relative; overflow: hidden }
+    .db-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--neon), var(--accent)); opacity: .7 }
+    .db-card-gold { border-color: rgba(255,213,79,.35); box-shadow: 0 0 30px rgba(255,213,79,.07) }
+    .db-card-gold::before { background: linear-gradient(90deg, var(--accent), #ff9800) }
+    .db-title { font-size: clamp(20px,4vw,32px); font-weight: 900; margin-bottom: 18px; background: linear-gradient(135deg, var(--text), var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2 }
+    .db-title-gold { background: linear-gradient(135deg, var(--text), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent }
+    .db-text { font-size: 16px; line-height: 1.9; color: var(--dim); margin-bottom: 14px }
+    .db-text-reveal { font-size: 15px; line-height: 1.85; color: var(--text); opacity: 0; transition: opacity .6s ease; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border) }
+    .db-text-reveal.shown { opacity: 1 }
+    .db-step { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 14px; color: var(--dim) }
+    .db-step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--neon); flex-shrink: 0 }
+    .db-progress { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px }
+    .db-pip { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: all .4s }
+    .db-pip.db-pip-done { background: var(--neon); box-shadow: 0 0 8px var(--neon) }
+    .db-pip.db-pip-active { background: var(--accent); box-shadow: 0 0 10px var(--accent) }
+    .db-nav { display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px }
+    .btn-debrief { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #1B5E20, #2E7D32); color: #fff; padding: 13px 30px; font-size: 15px; font-weight: 700; font-family: 'Tajawal', sans-serif; border: none; cursor: pointer; border-radius: 8px; transition: all .2s; box-shadow: 0 0 0 rgba(0,255,136,0) }
+    .btn-debrief:hover { transform: translateY(-2px); box-shadow: 0 0 24px rgba(0,255,136,.3) }
+    .btn-confirm { background: linear-gradient(135deg, #b8860b, #d4a017); box-shadow: 0 0 0 rgba(255,213,79,0) }
+    .btn-confirm:hover { box-shadow: 0 0 24px rgba(255,213,79,.35) }
+    /* Flip card */
+    .flip-container { perspective: 900px; width: 100%; max-width: 460px; height: 130px; margin: 24px auto 0; cursor: pointer }
+    .flip-inner { position: relative; width: 100%; height: 100%; transition: transform .7s cubic-bezier(.4,0,.2,1); transform-style: preserve-3d }
+    .flip-container.flipped .flip-inner { transform: rotateY(180deg) }
+    .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 18px }
+    .flip-front { background: rgba(0,255,136,.08); border: 1px solid rgba(0,255,136,.3); }
+    .flip-back { background: rgba(255,213,79,.1); border: 1px solid rgba(255,213,79,.4); transform: rotateY(180deg) }
+    .flip-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; font-family: 'Share Tech Mono', monospace; opacity: .55 }
+    .flip-label-top { color: var(--neon) }
+    .flip-label-back { color: var(--accent) }
+    .flip-text { font-size: 15px; font-weight: 700; color: var(--text); text-align: center }
+    .flip-hint { font-size: 10px; color: var(--dim); margin-top: 4px; font-family: 'Share Tech Mono', monospace }
+    .db-icon { font-size: 36px; margin-bottom: 12px; display: block; text-align: center }
+
+    /* ====== TOOLTIP STYLES ====== */
+    .tip-wrap { position: relative; display: inline-flex; align-items: center; vertical-align: middle; margin-right: 6px; flex-shrink: 0; }
+    .tip-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(0,255,136,.15); border: 1px solid rgba(0,255,136,.45);
+      color: var(--neon); font-size: 10px; font-weight: 900;
+      font-family: 'Share Tech Mono', monospace; cursor: pointer;
+      transition: background .2s, box-shadow .2s; line-height: 1;
+      flex-shrink: 0; user-select: none; touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tip-icon:hover, .tip-icon.tip-open { background: rgba(0,255,136,.28); box-shadow: 0 0 8px rgba(0,255,136,.35) }
+    .tip-bubble {
+      position: absolute; bottom: calc(100% + 10px); right: 0;
+      background: #141c15; border: 1px solid #00ff88;
+      color: #e8f0e9; padding: 10px 14px; border-radius: 10px;
+      max-width: 280px; min-width: 180px;
+      font-size: 12px; line-height: 1.65; text-align: right;
+      font-family: 'Tajawal', sans-serif; font-weight: 400;
+      box-shadow: 0 0 14px rgba(0,255,136,.22), 0 4px 18px rgba(0,0,0,.5);
+      z-index: 500; direction: rtl; white-space: normal;
+      pointer-events: none;
+      opacity: 0; transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      /* Prevent bubble from going off-screen left */
+      max-width: min(280px, calc(100vw - 40px));
+    }
+    .tip-bubble::after {
+      content: ''; position: absolute; top: 100%; right: 8px;
+      border: 6px solid transparent; border-top-color: #00ff88;
+    }
+    .tip-bubble::before {
+      content: ''; position: absolute; top: 100%; right: 9px;
+      border: 5px solid transparent; border-top-color: #141c15; z-index: 1;
+    }
+    /* Desktop hover */
+    @media (hover: hover) {
+      .tip-wrap:hover .tip-bubble { opacity: 1; transform: translateY(0); }
+    }
+    /* Class-based show (mobile tap + keyboard) */
+    .tip-wrap .tip-bubble.tip-show { opacity: 1 !important; transform: translateY(0) !important; }
+    .lq { display: flex; align-items: flex-start; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
+    .lq-text { flex: 1; font-size: 15px; font-weight: 600; line-height: 1.75; color: var(--text); }
+  </style>
+<body>
+<div id="flash"></div>
+<div id="trans"><span id="trans-txt">تحميل...</span></div>
+
+<div class="app">
+  <div class="hdr">
+    <span class="hdr-logo">TER · L3 Psychologie</span>
+    <div class="dots" id="dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+
+  <!-- S0 CHECK -->
+  <div class="screen active" id="s-check">
+    <div class="lbl">التحقق التقني</div>
+    <h2>قبل البدء — تحقق تقني سريع</h2>
+    <p style="color:var(--dim);margin-bottom:24px">نتحقق إلي كل شيء يخدم مليح على جهازك قبل ما نبدا.</p>
+    <div class="card" id="check-anim-card">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <span id="check-anim-icon" style="font-size:24px">⏳</span>
+        <div><div style="font-weight:700;font-size:15px;color:var(--text)">اختبار الصورة المتحركة</div><div style="font-size:13px;color:var(--dim)">باش تشوف animation قصيرة — 5 ثواني</div></div>
+      </div>
+      <div id="check-canvas-wrap" style="position:relative;background:#000;border-radius:8px;overflow:hidden;border:1px solid var(--border);max-width:500px;margin:0 auto 14px"><canvas id="check-cv" width="500" height="120" style="display:block;width:100%;height:auto"></canvas></div>
+      <div id="check-anim-btns" style="display:none;gap:10px;justify-content:center;display:flex"><button class="btn btn-g" onclick="checkAnimOk()">✅ شفتها مليح</button><button class="btn-out btn" onclick="checkAnimRetry()">🔄 عاود</button></div>
+    </div>
+    <div class="card" id="check-audio-card" style="opacity:.4;pointer-events:none">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px"><span id="check-audio-icon" style="font-size:24px">🔇</span><div><div style="font-weight:700;font-size:15px;color:var(--text)">اختبار الصوت</div><div style="font-size:13px;color:var(--dim)">اضغط باش تسمع — تأكد إلي الصوت شاغل</div></div></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-g" onclick="checkPlaySound()">🔊 اسمع الصوت</button><button class="btn-out btn" id="check-audio-ok-btn" onclick="checkAudioOk()" style="display:none">✅ سمعته مليح</button></div>
+      <div id="check-audio-msg" style="text-align:center;font-size:12px;color:var(--dim);margin-top:10px"></div>
+    </div>
+    <div style="text-align:center;margin-top:8px"><button class="btn btn-g btn-lg" id="check-continue-btn" onclick="goTo('s-intro')" disabled>كمّل للدراسة ←</button><p style="font-size:12px;color:var(--dim);margin-top:10px">* إذا ما خدمش الصوت، يمكنك تكمل بدونه</p></div>
+  </div>
+
+  <!-- S1 CONSENT -->
+  <div class="screen" id="s-intro">
+    <div class="lbl">موافقة مستنيرة</div>
+    <h1>استمارة موافقة مستنيرة</h1>
+    <div class="card card-g"><p style="font-size:16px;line-height:1.9;color:var(--text)">رحباً بك،<br>أنا الطالب محمد شعير، باحث في السنة الثالثة علم النفس بكلية العلوم الإنسانية والاجتماعية بتونس. أدعوك للمشاركة في هذه الدراسة العلمية التي تندرج ضمن مشروع تخرجي.</p></div>
+    <div class="card"><h3 style="margin-bottom:16px">بمشاركتك في هذا البحث، أنت تؤكد فهمك لما يلي:</h3><ul class="consent-list"><li><div class="consent-num">1</div><div><strong>هدف البحث:</strong> دراسة آليات الإدراك البصري والتفاعل مع الأشكال الهندسية المتحركة في السياق الرقمي.</div></li><li><div class="consent-num">2</div><div><strong>طريقة المشاركة:</strong> ستشاهد مقطع فيديو قصير (حوالي 40 ثانية) يصور حركة أشكال هندسية، ثم ستُطلب منك الإجابة على بعض الأسئلة حول تجربتك الشخصية أثناء المشاهدة. العملية تستغرق أقل من 5 دقائق.</div></li><li><div class="consent-num">3</div><div><strong>الحرية والانسحاب:</strong> مشاركتك تطوعية، ويمكنك التوقف والانسحاب في أي لحظة دون الحاجة لتبرير.</div></li><li><div class="consent-num">4</div><div><strong>السرية التامة:</strong> معطياتك الشخصية مجهولة تماماً وتُعالج إحصائياً فقط. لن يظهر اسمك في أي مرحلة من مراحل البحث.</div></li><li><div class="consent-num">5</div><div><strong>الموافقة:</strong> بالضغط على زر "أوافق وأبدأ التجربة"، أنت تعلن موافقتك على المشاركة في هذه الدراسة.</div></li></ul></div>
+    <button class="btn btn-g btn-lg" onclick="goTo('s-demo')">أوافق وأبدأ التجربة ←</button>
+  </div>
+
+  <!-- S2 INSTRUCTIONS -->
+  <div class="screen" id="s-instructions">
+    <div class="lbl">تعليمات التجربة</div>
+    <h2>كيفاش باش تمشي التجربة</h2>
+    <div class="card card-g"><p style="font-size:15px;line-height:1.9;color:var(--text)">🎯 <strong>الهدف:</strong> باش تشوف <strong>4 animations قصيرة</strong> وتجاوب على بعض الأسئلة بعد كل واحدة.</p></div>
+    <div class="card"><div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;gap:14px;align-items:flex-start"><div style="width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px">1</div><div><div style="font-weight:700;color:var(--text);margin-bottom:4px">شوف كل animation بعناية</div><div style="font-size:13px;color:var(--dim)">كل مقطع يدوم 40 ثانية — ابقى مركّز من الأول للآخر</div></div></div><div style="display:flex;gap:14px;align-items:flex-start"><div style="width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px">2</div><div><div style="font-weight:700;color:var(--text);margin-bottom:4px">جاوب على الأسئلة بصدق</div><div style="font-size:13px;color:var(--dim)">ما كاش جواب صح ولا غلط — نحب نعرف واش حسيت بيه أنت بالحقيقة</div></div></div><div style="display:flex;gap:14px;align-items:flex-start"><div style="width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px">3</div><div><div style="font-weight:700;color:var(--text);margin-bottom:4px">فاصل قصير بين كل مقطع</div><div style="font-size:13px;color:var(--dim)">بين كل animation وأخرى، باش تعمل تمرين انتباه قصير — 10 ثواني وبس</div></div></div><div style="display:flex;gap:14px;align-items:flex-start"><div style="width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px">4</div><div><div style="font-weight:700;color:var(--text);margin-bottom:4px">كون في مكان هادي</div><div style="font-size:13px;color:var(--dim)">أوقف التنبيهات، اجلس في مكان ساكت، وحط السماعات إذا عندك</div></div></div></div></div>
+    <div class="card" style="text-align:center;padding:18px"><p style="font-size:14px;color:var(--dim);margin-bottom:0">⏱ المدة الإجمالية: <strong style="color:var(--text)">10 إلى 15 دقيقة</strong></p></div>
+    <div style="text-align:center"><button class="btn btn-g btn-lg" onclick="goTo('s-demo')">فاهمت — نبدا ←</button></div>
+  </div>
+
+  <!-- S3 DEMO -->
+  <div class="screen" id="s-demo">
+    <div class="lbl">معلومات أساسية</div>
+    <h2>بعض المعلومات عنك 🌟</h2>
+    <p style="color:var(--dim);font-size:14px;margin-bottom:20px">تُستخدم فقط لوصف مجموعة المشاركين إحصائياً — مشاركتك سرية بالكامل.</p>
+
+    <!-- بلوك الاسم المستعار -->
+    <div class="card demo-card" id="dc-pseudo">
+      <label class="flabel">🎭 حط إسم مستعار في بلاصة اسمك</label>
+      <p class="demo-sub">المشاركة متاعك سرية — حتى الاسم ما يظهرش</p>
+      <input type="text" id="pseudo-input" class="demo-input"
+             placeholder='مثلاً: "أبو خليل"، "تونسي"، "طيارة"، "عاشق القراءة"...'
+             oninput="onPseudo(this)" maxlength="40" autocomplete="off">
+      <div class="demo-bubble" id="bubble-pseudo"></div>
+    </div>
+
+    <!-- بلوك العمر -->
+    <div class="card demo-card" id="dc-age">
+      <label class="flabel">🎂 قداش عمرك؟</label>
+      <input type="number" id="age-input" class="demo-input demo-input-num"
+             placeholder="مثال: 22" min="15" max="99"
+             oninput="onAge(this)" autocomplete="off">
+      <div class="demo-bubble" id="bubble-age"></div>
+    </div>
+
+    <!-- بلوك الجنس -->
+    <div class="card demo-card" id="dc-sex">
+      <label class="flabel">👤 الجنس</label>
+      <div class="fopts">
+        <div class="fopt" onclick="pickSex(this,'ذكر')">ذكر</div>
+        <div class="fopt" onclick="pickSex(this,'أنثى')">أنثى</div>
+      </div>
+      <div class="demo-bubble" id="bubble-sex"></div>
+    </div>
+
+    <!-- بلوك المستوى الدراسي -->
+    <div class="card demo-card" id="dc-edu">
+      <label class="flabel">🎓 المستوى الدراسي</label>
+      <div class="fopts">
+        <div class="fopt" onclick="pickEdu(this,'ثانوي')">ثانوي</div>
+        <div class="fopt" onclick="pickEdu(this,'بكالوريا')">بكالوريا</div>
+        <div class="fopt" onclick="pickEdu(this,'جامعي')">جامعي</div>
+      </div>
+      <div class="demo-bubble" id="bubble-edu"></div>
+    </div>
+
+    <button class="btn btn-g btn-lg" id="btn-demo" onclick="startExperiment()" disabled style="width:100%;justify-content:center;margin-top:4px">التالي ←</button>
+  </div>
+
+  <!-- S4 ANIMATION -->
+  <div class="screen" id="s-anim">
+    <div class="lbl" id="anim-lbl">المقطع</div>
+    <h2>راقب الشكل بعناية طوال المقطع</h2>
+    <div class="cvwrap"><canvas id="cv" width="800" height="450"></canvas></div>
+  </div>
+
+  <!-- S5 DISTRACTOR -->
+  <div class="screen" id="s-dist">
+    <div class="lbl">فاصل قصير — تمرين انتباه</div>
+    <h2>كم عدد المثلثات التي تراها؟</h2>
+    <div class="card card-a"><div class="cbar"><div class="cfill" id="dist-cbar" style="width:100%"></div></div><p id="dist-status" style="font-size:12px;font-family:monospace;color:var(--dim);text-align:center;margin-bottom:14px">10s</p><div class="dshapes" id="dist-shapes"></div></div>
+    <div id="dist-ans" style="display:none;text-align:center"><p style="font-size:15px;color:var(--dim);margin-bottom:12px">اكتب إجابتك:</p><input type="number" class="dinput" id="dist-input" min="0" max="20" placeholder="0"><button class="btn btn-out" onclick="confirmDistractor()">تأكيد ←</button></div>
+    <div id="dist-trans" style="display:none"><div class="card" style="text-align:center;padding:36px"><p style="font-size:17px;color:var(--dim);margin-bottom:12px">استعد للمقطع التالي</p><div class="cbar" style="max-width:280px;margin:0 auto"><div class="cfill" id="trans-fill" style="width:100%"></div></div><p id="trans-timer" style="font-size:12px;font-family:monospace;color:var(--dim);margin-top:6px">15s</p></div></div>
+  </div>
+
+  <!-- S6 QUESTIONNAIRE -->
+  <div class="screen" id="s-quest">
+    <div class="lbl" id="qlbl">أسئلة</div>
+    <h2 id="qtitle">شنوة حسيت بيه؟</h2>
+    <p id="qinstruction" style="color:var(--dim);font-size:13px;margin-bottom:20px">جواب بلي حسيت بيه مفماش إجابة صحيحة ولى غالطة. في كل سؤال، اختار الرقم اللي يمثل رايك: 1 يعني مانيش موافق جملة، و 7 يعني موافق علخر والأرقام اللي في الوسط (من 2 لـ 6) هي درجات متفاوتة حسب إحساسك.</p>
+    <div id="qitems"></div>
+    <div id="openblock" style="display:none;margin-top:26px"><hr class="dv" style="border-color:var(--border);border-width:2px"><div class="lbl" style="margin-top:18px">السؤال النهائي — استرجاع حر</div><h3>بعد مشاهدة المقاطع الأربعة</h3><p style="font-size:16px;font-weight:500;color:var(--ink);line-height:1.8">صِف لي البطل الذي لا يزال في ذهنك الآن. ماذا تتذكر منه؟</p><textarea id="open-ans" placeholder="اكتب إجابتك هنا..."></textarea></div>
+    <div style="margin-top:22px;display:flex;justify-content:space-between;align-items:center"><span id="qprog" style="font-size:11px;color:var(--dim);font-family:monospace">0 / 0</span><button class="btn btn-g" id="btn-quest" onclick="nextAfterQuest()" disabled>التالي ←</button></div>
+  </div>
+
+  <!-- S7 SEND -->
+  <div class="screen" id="s-send">
+    <div class="lbl">إرسال البيانات</div>
+    <div style="text-align:center;padding:56px 20px"><span class="send-icon" id="send-icon">⏳</span><h2 id="send-title">جارٍ إرسال استجاباتك…</h2><p id="send-msg" style="color:var(--dim)">يرجى الانتظار. لا تغلق النافذة.</p><div class="sdot" id="sdot"></div></div>
+  </div>
+
+  <!-- S-DEBRIEF — Débriefing éthique cinématique (5 écrans) -->
+  <div class="screen" id="s-debrief">
+    <div class="lbl">إفصاح علمي</div>
+
+    <!-- Progress pips -->
+    <div class="db-progress" id="db-pips">
+      <div class="db-pip db-pip-active" id="dbpip-0"></div>
+      <div class="db-pip" id="dbpip-1"></div>
+      <div class="db-pip" id="dbpip-2"></div>
+      <div class="db-pip" id="dbpip-3"></div>
+      <div class="db-pip" id="dbpip-4"></div>
+    </div>
+
+    <!-- ÉCRAN 1 — Soft Transition -->
+    <div class="db-screen db-active" id="dbs-1">
+      <div class="db-card">
+        <span class="db-icon">🙏</span>
+        <div class="db-title">شكراً.</div>
+        <p class="db-text">لقد أكملت الجزء الظاهر من التجربة.</p>
+        <div class="db-text-reveal" id="dbs1-reveal">
+          لكن… ما شاهدته لم يكن سوى جزء من الدراسة.<br>
+          <span style="font-size:14px;color:var(--dim)">قبل أن ننتهي، نودّ مشاركتك بشفافية تامة في الهدف الحقيقي من هذا البحث.</span>
+        </div>
+      </div>
+      <div class="db-nav"><button class="btn-debrief" onclick="dbNext()">التالي ←</button></div>
+    </div>
+
+    <!-- ÉCRAN 2 — Cognitive Reflection -->
+    <div class="db-screen" id="dbs-2">
+      <div class="db-card">
+        <span class="db-icon">🧠</span>
+        <div class="db-title">عقلك فعل أكثر مما توقّعت</div>
+        <p class="db-text">
+          أثناء متابعتك للحركات والتفاصيل البصرية، كنا نهتم أيضاً بطريقة تشكّل الانطباع العاطفي لديك تجاه الشخصية.
+        </p>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+          <div class="db-step"><div class="db-step-dot"></div>هل أحسست بالتعاطف مع الشخصية؟</div>
+          <div class="db-step"><div class="db-step-dot"></div>هل تبنّيت منظورها العاطفي؟</div>
+          <div class="db-step"><div class="db-step-dot"></div>هل انغمست في تجربتها؟</div>
+        </div>
+        <p class="db-text" style="margin-top:14px;font-size:14px">هذه هي مؤشرات <strong style="color:var(--neon)">التعرف السردي</strong> التي درسناها (Cohen, 2001).</p>
+      </div>
+      <div class="db-nav"><button class="btn-debrief" onclick="dbNext()">التالي ←</button></div>
+    </div>
+
+    <!-- ÉCRAN 3 — Real Objective -->
+    <div class="db-screen" id="dbs-3">
+      <div class="db-card db-card-gold">
+        <span class="db-icon">🎯</span>
+        <div class="db-title db-title-gold">السؤال البحثي الحقيقي</div>
+        <p class="db-text">
+          هل يتعاطف الإنسان أكثر مع الشخصية المثالية… أم مع الشخصية التي تُظهر ضعفاً ومحاولات حقيقية؟
+        </p>
+        <div style="background:rgba(255,213,79,.07);border:1px solid rgba(255,213,79,.25);border-radius:10px;padding:16px 20px;margin:14px 0">
+          <p style="font-size:14px;color:var(--text);margin:0;line-height:1.8">
+            شاهدت 4 سيناريوهات مختلفة في مستوى الجهد ونتيجة السباق.<br>
+            الفرضية المحورية: <strong style="color:var(--accent)">الشخصية التي بذلت جهداً حقيقياً وفشلت في اللحظة الأخيرة (95%) تولّد أعلى مستوى من التعرف النفسي.</strong>
+          </p>
+        </div>
+        <p class="db-text" style="font-size:13px">هذا ما يُعرف بـ <strong style="color:var(--accent)">Underdog Effect</strong> (Vandello, 2007)، ويرتبط بآليات الإجلاء الأخلاقي (Haidt, 2003) والتفكير المعاكس للواقع (Medvec, 1995).</p>
+      </div>
+      <div class="db-nav"><button class="btn-debrief" onclick="dbNext()">التالي ←</button></div>
+    </div>
+
+    <!-- ÉCRAN 4 — Why We Couldn't Tell You Before -->
+    <div class="db-screen" id="dbs-4">
+      <div class="db-card">
+        <span class="db-icon">🔬</span>
+        <div class="db-title">لماذا كان هذا ضرورياً؟</div>
+        <p class="db-text">
+          لو تم شرح الهدف الكامل منذ البداية، قد تتغير إجاباتك بشكل غير واعٍ، مما يؤثر على صدق النتائج العلمية.
+        </p>
+        <div style="background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:16px 20px;margin:14px 0">
+          <p style="font-size:14px;color:var(--text);margin:0;line-height:1.8">
+            هذا ليس خداعاً — بل <strong style="color:var(--neon)">ضرورة منهجية</strong> معتمدة في علم النفس التجريبي وموثّقة في مبادئ الأخلاقيات البحثية الدولية (APA, 2017).
+          </p>
+        </div>
+        <p class="db-text" style="font-size:13px">الهدف المُعلن في البداية (<em>الإدراك البصري</em>) حافظ على صحة استجاباتك وأعطى قيمة علمية حقيقية لمشاركتك.</p>
+      </div>
+      <div class="db-nav"><button class="btn-debrief" onclick="dbNext()">التالي ←</button></div>
+    </div>
+
+    <!-- ÉCRAN 5 — Ethical Closure + flip card + confirmation -->
+    <div class="db-screen" id="dbs-5">
+      <div class="db-card db-card-gold">
+        <span class="db-icon">⭐</span>
+        <div class="db-title db-title-gold">مشاركتك تصنع فرقاً</div>
+        <p class="db-text">
+          جميع إجاباتك مجهولة تماماً وتُستخدم فقط لأغراض البحث العلمي في إطار مذكرة تخرج بكلية علم النفس.
+        </p>
+        <p class="db-text">
+          إذا رغبت، <strong style="color:var(--text)">يمكنك سحب مشاركتك</strong> من الدراسة في هذه المرحلة بالتواصل مع الباحث، دون أي تبعات.
+        </p>
+
+        <!-- Flip card: front = stated title / back = real title -->
+        <div style="margin-top:10px">
+          <p style="font-size:12px;color:var(--dim);text-align:center;font-family:monospace;letter-spacing:1px;margin-bottom:6px">اضغط لتكشف الهوية الحقيقية للدراسة ↓</p>
+          <div class="flip-container" id="flipCard" onclick="document.getElementById('flipCard').classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <span class="flip-label flip-label-top">ما أُعلن في البداية</span>
+                <span class="flip-text">Visual Perception Study</span>
+                <span class="flip-hint">اضغط للكشف →</span>
+              </div>
+              <div class="flip-face flip-back">
+                <span class="flip-label flip-label-back">الهدف الحقيقي</span>
+                <span class="flip-text" style="color:var(--accent)">Emotional Connection &amp;<br>Underdog Effect Study</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="db-nav" style="justify-content:center;margin-top:18px">
+        <button class="btn-debrief btn-confirm btn-lg" onclick="dbFinish()">✅ أؤكد مشاركتي وأُنهي الدراسة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- S9 END (simplifié — le vrai debrief est passé) -->
+  <div class="screen" id="s-end">
+    <div class="lbl">خاتمة</div>
+    <div class="card card-g" style="text-align:center;padding:52px 40px">
+      <h1>شكراً جزيلاً! 🎉</h1>
+      <p style="font-size:17px;line-height:1.9;margin-bottom:20px">لقد أنهيت الدراسة بنجاح ومشاركتك موثّقة.</p>
+      <p style="font-size:14px;color:var(--dim);line-height:1.8">إسهامك يساعد في فهم أعمق لآليات التعرف السردي وتأثير الأضعف (Underdog Effect) لدى جيل Z التونسي.</p>
+      <hr class="dv" style="margin:22px 0">
+      <p style="font-size:12px;color:var(--dim)">TER — Licence 3 Psychologie · 2025–2026<br>محمد شعير · كلية العلوم الإنسانية والاجتماعية بتونس</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PANNEAU CHERCHEUR — invisible participant
+     Activation : taper "scores" + Entrée  |  ou 5× clic logo
+     ══════════════════════════════════════════════════════════ -->
+<div id="adm-panel" style="display:none;position:fixed;bottom:18px;right:18px;z-index:99999;width:320px;max-height:88vh;overflow-y:auto;background:#0a0f0b;border:1px solid #00ff88;border-radius:12px;box-shadow:0 0 32px rgba(0,255,136,.25);font-family:'Share Tech Mono',monospace;font-size:11px;color:#e8f0e9;direction:ltr;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(0,255,136,.1);border-bottom:1px solid rgba(0,255,136,.25);border-radius:12px 12px 0 0;position:sticky;top:0;z-index:1;">
+    <span style="color:#00ff88;letter-spacing:2px;font-size:10px;">⚗ CHERCHEUR · SCORES</span>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="admRefresh()" title="Rafraîchir" style="background:transparent;border:1px solid rgba(0,255,136,.4);color:#00ff88;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px;font-family:inherit;">↻</button>
+      <button onclick="document.getElementById('adm-panel').style.display='none'" style="background:transparent;border:1px solid rgba(255,68,68,.4);color:#ff4444;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px;font-family:inherit;">✕</button>
+    </div>
+  </div>
+  <div id="adm-body" style="padding:12px 14px;">
+    <p style="color:#7a9a7e;text-align:center;margin:20px 0;font-size:10px;">Tapez <strong style="color:#00ff88;">scores</strong> + Entrée pour activer<br>ou 5× clic sur le logo TER</p>
+  </div>
+  <div style="padding:10px 14px;border-top:1px solid rgba(0,255,136,.15);display:flex;gap:8px;position:sticky;bottom:0;background:#0a0f0b;">
+    <button onclick="admCopyJSON()" style="flex:1;background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.35);color:#00ff88;border-radius:6px;padding:7px 0;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;">📋 JSON</button>
+    <button onclick="admCopyCSV()" style="flex:1;background:rgba(255,213,79,.08);border:1px solid rgba(255,213,79,.3);color:#ffd54f;border-radius:6px;padding:7px 0;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;">📊 CSV Sheets</button>
+  </div>
+</div>
+
+<script>
+  const CFG = {
+    W:800, H:450,
+    SHEETS: 'https://script.google.com/macros/s/AKfycbwxDW--yQFaweDzohGobZ5im14xus2Z2ShmhKYp5zMc3bxOhmetNerjoWDBJ2PN-WW9cQ/exec',
+    DT_SHOW:10000, DT_TRANS:15000
+  };
+
+  // ==================== APP STATE ====================
+  const APP = { demo: {}, order: [], trialIdx: 0, currentC: '', answers: {}, distractors: [], openText: '' };
+
+  // ==================== NAVIGATION ====================
+  const DOT_FOR = { 'check':0,'intro':1,'instructions':2,'demo':3,'anim':4,'dist':4,'quest':5,'send':6,'end':7 };
+  function goTo(id) {
+    const ov = document.getElementById('trans');
+    const txt = document.getElementById('trans-txt');
+    if (txt) txt.textContent = 'تحميل...';
+    ov.classList.add('show');
+    setTimeout(() => {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const realId = id.startsWith('s-') ? id : 's-' + id;
+      const el = document.getElementById(realId);
+      if (el) el.classList.add('active');
+      const key = id.replace('s-', '');
+      const active = DOT_FOR[key] ?? 0;
+      document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.remove('active', 'done');
+        if (i < active) d.classList.add('done');
+        else if (i === active) d.classList.add('active');
+      });
+      window.scrollTo(0, 0);
+      ov.classList.remove('show');
+    }, 360);
+  }
+
+  // ── Demo screen helpers ───────────────────────────────────────────────────────
+  let _bubbleTimers = {};
+
+  function _showBubble(id, text, autohide) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.classList.add('show');
+    clearTimeout(_bubbleTimers[id]);
+    if (autohide) {
+      _bubbleTimers[id] = setTimeout(() => el.classList.remove('show'), autohide);
+    }
+  }
+
+  function _checkDemoComplete() {
+    document.getElementById('btn-demo').disabled = !(APP.demo.age && APP.demo.sex && APP.demo.edu);
+  }
+
+  function _markDone(cardId, done) {
+    const card = document.getElementById(cardId);
+    if (card) card.classList.toggle('dc-done', done);
+  }
+
+  function onPseudo(input) {
+    const val = input.value.trim();
+    APP.demo.pseudo = val || '';
+    if (val.length >= 2) {
+      _showBubble('bubble-pseudo', `أهلا بك ${val} 🙌`);
+    } else {
+      const b = document.getElementById('bubble-pseudo');
+      if (b) b.classList.remove('show');
+    }
+  }
+
+  function onAge(input) {
+    const val = parseInt(input.value);
+    if (!isNaN(val) && val >= 15 && val <= 99) {
+      APP.demo.age = String(val);
+      _markDone('dc-age', true);
+      _showBubble('bubble-age', '😄 العمر كلو يا حبيبي');
+    } else {
+      APP.demo.age = '';
+      _markDone('dc-age', false);
+      const b = document.getElementById('bubble-age');
+      if (b) b.classList.remove('show');
+    }
+    _checkDemoComplete();
+  }
+
+  function pickSex(el, val) {
+    el.closest('.fopts').querySelectorAll('.fopt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+    APP.demo.sex = val;
+    _markDone('dc-sex', true);
+    const msg = val === 'ذكر' ? 'راجل مش في وجهك ! 😎' : 'مرى مش في وجهك ! ✨';
+    _showBubble('bubble-sex', msg, 2500);
+    _checkDemoComplete();
+  }
+
+  function pickEdu(el, val) {
+    el.closest('.fopts').querySelectorAll('.fopt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+    APP.demo.edu = val;
+    _markDone('dc-edu', true);
+    _showBubble('bubble-edu', 'إن شاء الله بالنجاح 🤲', 2500);
+    _checkDemoComplete();
+  }
+
+  // Legacy pick (used elsewhere if needed)
+  function pick(el, key, val) {
+    el.closest('.fopts').querySelectorAll('.fopt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+    APP.demo[key] = val;
+    _checkDemoComplete();
+  }
+
+  function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function startExperiment() { APP.order = shuffle([0,1,2,3]); APP.trialIdx = 0; APP.answers = {}; runTrial(); }
+  function runTrial() {
+    const idx = APP.order[APP.trialIdx];
+    APP.currentC = ["C1","C2","C3","C4"][idx];
+    const labels = ["المقطع الأول","المقطع الثاني","المقطع الثالث","المقطع الرابع"];
+    document.getElementById("anim-lbl").textContent = labels[APP.trialIdx];
+    // MOD3: badge supprimé — le participant ne voit pas la condition
+    const badge = document.getElementById("cbadge");
+    if (badge) badge.style.display = 'none';
+    goTo("s-anim");
+    setTimeout(() => { runAnimation(APP.currentC); }, 800);
+  }
+
+  // ====================================================================================
+  // ==================== ANIMATION ENGINE (identique à stimuli_TER_2x2_FIXED.html) ====
+  // ====================================================================================
+
+  // ─── CONSTANTS ───────────────────────────────────────────────────────────────
+  const W = 800, H = 450;
+  const TY1 = 100, TY2 = 350;
+  const CY_CENTER = 225;
+  const CY_MIN = TY1 + 22 + 4;
+  const CY_MAX = TY2 - 22 - 4;
+  const CR = 22;
+  const DURATION = 40;
+  const OBX = [200, 430, 640];
+  const OBW = 20;
+  const OBH = Math.round(0.82 * (TY2 - TY1));
+
+  // ─── AUDIO ENGINE (ambiance existante de index.html + sons de stimuli) ────────
+  // ─── AUDIO ENGINE (identique à stimuli_TER_2x2_FIXED.html) ──────────────────
+  let _audioCtx = null;
+  function getAudioCtx() {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return _audioCtx;
+  }
+  const _audioNodes = {}; // keyed by condId for ambient
+
+  function _startLowEffortAmbient(condId) {
+    const ctx = getAudioCtx();
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    // MOD1 : C1=0.22, C2=0.24 — clairement audibles mais calmes
+    const vol = condId === 'C1' ? 0.22 : 0.24;
+    master.gain.setValueAtTime(vol, now);
+    master.connect(ctx.destination);
+    // LFO très lent (0.4Hz) pour légère modulation organique
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(0.4, now);
+    lfoGain.gain.setValueAtTime(vol * 0.15, now);
+    lfo.connect(lfoGain); lfoGain.connect(master.gain); lfo.start(now);
+    const oscs = [60, 120].map(f => {
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(f, now);
+      o.connect(master); o.start(); return o;
+    });
+    _audioNodes[condId] = { oscs, lfo, lfoGain, master, type: 'low' };
+  }
+
+  function _startHighEffortAmbient(condId) {
+    const ctx = getAudioCtx();
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    // MOD1: C3=0.42, C4=0.48 — forte intensité émotionnelle
+    const vol = condId === 'C4' ? 0.48 : 0.42;
+    master.gain.setValueAtTime(vol, now);
+    master.connect(ctx.destination);
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(3.8, now);
+    lfoGain.gain.setValueAtTime(0.066, now);
+    lfo.connect(lfoGain); lfoGain.connect(master.gain); lfo.start(now);
+    const sawOsc = ctx.createOscillator();
+    sawOsc.type = 'sawtooth';
+    sawOsc.frequency.setValueAtTime(85, now);
+    sawOsc.frequency.linearRampToValueAtTime(160, now + 40 * 0.92);
+    sawOsc.connect(master); sawOsc.start(now);
+    const sqOsc = ctx.createOscillator();
+    sqOsc.type = 'square';
+    sqOsc.frequency.setValueAtTime(170, now);
+    sqOsc.frequency.linearRampToValueAtTime(240, now + 40 * 0.92);
+    const sqGain = ctx.createGain();
+    sqGain.gain.setValueAtTime(0.55, now);
+    sqOsc.connect(sqGain); sqGain.connect(master); sqOsc.start(now);
+    _audioNodes[condId] = { sawOsc, sqOsc, lfo, lfoGain, sqGain, master, type: 'high' };
+  }
+
+  function _stopAmbient(condId) {
+    const n = _audioNodes[condId];
+    if (!n) return;
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    try {
+      n.master.gain.setValueAtTime(n.master.gain.value, now);
+      n.master.gain.linearRampToValueAtTime(0, now + 0.05);
+      if (n.type === 'low') {
+        n.oscs.forEach(o => o.stop(now + 0.06));
+        if (n.lfo) n.lfo.stop(now + 0.06);
+      } else {
+        n.sawOsc.stop(now+0.06); n.sqOsc.stop(now+0.06); n.lfo.stop(now+0.06);
+      }
+    } catch(e) {}
+    delete _audioNodes[condId];
+  }
+
+  function _playObstacleHit() {
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.linearRampToValueAtTime(80, now + 0.08);
+    gain.gain.setValueAtTime(0.5, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.13);
+  }
+
+  function _playSuccess(condId) {
+    _stopAmbient(condId);
+    const ctx = getAudioCtx();
+    [523, 659, 784, 1047].forEach((freq, i) => {
+      const t = ctx.currentTime + i * 0.13;
+      const osc = ctx.createOscillator(); const gain = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0.45, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t); osc.stop(t + 0.6);
+    });
+  }
+
+  function _playFailure(condId) {
+    _stopAmbient(condId);
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.linearRampToValueAtTime(50, now + 1.4);
+    gain.gain.setValueAtTime(0.5, now);
+    gain.gain.linearRampToValueAtTime(0.0001, now + 1.4);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 1.41);
+  }
+
+  // Wrapper API used by animation engine
+  const AudioEngine = {
+    init: async function() {
+      const ctx = getAudioCtx();
+      if (ctx.state === 'suspended') try { await ctx.resume(); } catch(e) {}
+    },
+    startAmbience: function(isHighEffort) {
+      const condId = APP.currentC;
+      if (isHighEffort) _startHighEffortAmbient(condId);
+      else _startLowEffortAmbient(condId);
+    },
+    stopAll: function() {
+      _stopAmbient(APP.currentC);
+    },
+    updateEffort: function() { /* ambiance gérée par condition, pas par wiggle */ },
+    playObstacleHit: _playObstacleHit,
+    playSuccess: function() { _playSuccess(APP.currentC); },
+    playFailure: function() { _playFailure(APP.currentC); },
+  };
+
+  // ─── EASING ──────────────────────────────────────────────────────────────────
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const easeIn  = t => Math.pow(t, 3);
+
+  // ─── POSITION ENGINE (from stimuli_TER_2x2_FIXED.html) ──────────────────────
+  function getX_C1(t) { return Math.min(800, (t / 40) * 800); }
+  function getX_C2(t) { return Math.min(800, (t / 40) * 800); }
+
+  function buildC3Timeline() {
+    const DT = 1 / 120;
+    const frames = Math.round(40 / DT);
+    const STRUGGLE_DUR = [0.6, 1.8, 0.6];
+
+    function simulate(v_base) {
+      let sx = 0;
+      const strug = OBX.map((ox, i) => ({ active:false, t:0, done:false, sx0:0, dur:STRUGGLE_DUR[i] }));
+      const res = [0];
+      for (let f = 1; f <= frames; f++) {
+        if (sx >= 800) { res.push(800); continue; }
+        let inStruggle = false;
+        for (let i = 0; i < OBX.length; i++) {
+          const s = strug[i];
+          if (s.done) continue;
+          if (!s.active && OBX[i] - sx >= 0 && OBX[i] - sx < 4) {
+            s.active = true; s.t = 0; s.sx0 = sx;
+          }
+          if (s.active) {
+            s.t += DT;
+            inStruggle = true;
+            if (s.t >= s.dur) {
+              s.done = true; s.active = false;
+              sx = OBX[i] + OBW / 2 + 3;
+            } else {
+              const prog = s.t / s.dur;
+              if (i === 1) {
+                const vib = Math.sin(s.t * Math.PI * 2 * 11) * 3 * (1 - prog * 0.4)
+                          + Math.sin(s.t * Math.PI * 2 * 17) * 1.5;
+                const creep = Math.pow(prog, 3) * 5;
+                sx = s.sx0 + creep + vib;
+              } else {
+                const eased = easeOut(Math.min(prog / 0.4, 1));
+                const bounce = prog < 0.5
+                  ? Math.sin(prog / 0.5 * Math.PI) * -8 * (1 - prog)
+                  : 0;
+                const creep = prog > 0.35 ? Math.pow((prog - 0.35) / 0.65, 1.8) * 12 : 0;
+                sx = s.sx0 + eased * (OBX[i] - s.sx0) + bounce + creep;
+              }
+              res.push(Math.max(0, sx));
+            }
+            if (s.active) break;
+            if (!s.active) { res.push(Math.max(0, sx)); break; }
+          }
+        }
+        if (!inStruggle) {
+          let mult = 1.0;
+          for (let i = 0; i < OBX.length; i++) {
+            if (!strug[i].done && !strug[i].active) {
+              const dist = OBX[i] - sx;
+              if (dist > 0 && dist < 60) mult = Math.min(mult, 0.25 + 0.75 * (dist / 60));
+            }
+          }
+          sx = Math.min(800, sx + v_base * mult * DT);
+          res.push(sx);
+        }
+      }
+      while (res.length <= frames) res.push(800);
+      return res;
+    }
+
+    let lo = 18, hi = 55;
+    for (let i = 0; i < 120; i++) {
+      const mid = (lo + hi) / 2;
+      const r = simulate(mid);
+      if (r[Math.min(frames, r.length-1)] < 800) lo = mid; else hi = mid;
+    }
+    return new Float32Array(simulate((lo + hi) / 2));
+  }
+
+  const C3_XS = buildC3Timeline();
+  function getX_C3(t) {
+    const frame = Math.min(Math.round(t * 120), C3_XS.length - 1);
+    return Math.max(0, Math.min(800, C3_XS[frame]));
+  }
+
+  function isStruggling(t) {
+    const f = Math.round(t * 120);
+    if (f < 6 || f >= C3_XS.length - 1) return false;
+    const delta = Math.abs(C3_XS[f] - C3_XS[Math.max(0, f - 8)]);
+    return delta < 0.8;
+  }
+
+  function getWiggleY(t, struggling, condId) {
+    if (t < 0) return 0;
+    // MOD2: micro-wiggle très subtil pour C1 et C2 (±1-2px, ~0.4Hz)
+    if (condId === 'C1' || condId === 'C2') {
+      const amp = condId === 'C1' ? 1.2 : 1.8;
+      return Math.sin(t * Math.PI * 2 * 0.38) * amp
+           + Math.sin(t * Math.PI * 2 * 0.21) * (amp * 0.4);
+    }
+    if (struggling) {
+      return Math.sin(t * Math.PI * 2 * 13) * 5
+           + Math.sin(t * Math.PI * 2 * 29) * 2;
+    }
+    const amp = Math.min(4 + (t / 40) * 38, 42);
+    const freq = 0.75 + t * 0.014;
+    const noise = Math.sin(t * 7.3) * 3 + Math.sin(t * 13.1) * 2;
+    return Math.sin(t * Math.PI * 2 * freq) * amp + noise * (amp / 42);
+  }
+
+  // ─── OBSTACLE SHATTER ─────────────────────────────────────────────────────────
+  function makeDebris(ox) {
+    const obsY = CY_CENTER - OBH / 2;
+    const pieces = [];
+    for (let i = 0; i < 18; i++) {
+      pieces.push({
+        x: ox + (Math.random() - 0.5) * OBW * 1.5,
+        y: obsY + Math.random() * OBH,
+        w: 3 + Math.random() * 9, h: 3 + Math.random() * 9,
+        vx: (Math.random() - 0.5) * 7,
+        vy: (Math.random() - 0.7) * 8,
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - 0.5) * 0.4,
+      });
+    }
+    return pieces;
+  }
+
+  // ─── ANIMATION STATE ──────────────────────────────────────────────────────────
+  const CONDITIONS_META = {
+    C1: { effort:false, success:true  },
+    C2: { effort:false, success:false },
+    C3: { effort:true,  success:true  },
+    C4: { effort:true,  success:false },
+  };
+
+  let animState = null;
+  let animRaf = null;
+
+  function initAnimState(condId) {
+    return {
+      condId,
+      running: false,
+      t0: null,
+      t: 0,
+      hud: 0,
+      finishLineFade: 1.0,
+      fadingFinish: false,
+      fadeStart: -1,
+      fadeDur: 0,
+      failSoundFired: false,
+      successSoundFired: false,
+      impactFired: [false, false, false],
+      debris: [null, null, null],
+      debrisT: [0, 0, 0],
+      struggling: false,
+      c4lineCut: false, c4peakArmed: false, _c4peakHit: false,
+      _c4cutT: 0, _hudAtFail: 0,
+    };
+  }
+
+  // ─── DRAW HELPERS ─────────────────────────────────────────────────────────────
+  function drawObstacle(ctx2d, ox, i, state, t) {
+    const obsY = CY_CENTER - OBH / 2;
+    if (state.debris[i]) {
+      const age = t - state.debrisT[i];
+      state.debris[i].forEach(p => {
+        const alpha = Math.max(0, 1 - age * 1.3);
+        if (alpha <= 0) return;
+        const px = p.x + p.vx * age * 58;
+        const py = p.y + p.vy * age * 58 + 0.5 * 200 * age * age;
+        ctx2d.save();
+        ctx2d.globalAlpha = alpha;
+        ctx2d.translate(px, py);
+        ctx2d.rotate(p.rot + p.rotV * age * 58);
+        const g = ctx2d.createLinearGradient(-p.w/2,0,p.w/2,0);
+        g.addColorStop(0,'#b83c3c'); g.addColorStop(0.5,'#e05050'); g.addColorStop(1,'#b83c3c');
+        ctx2d.fillStyle = g;
+        ctx2d.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx2d.restore();
+      });
+      ctx2d.globalAlpha = 1;
+      ctx2d.globalCompositeOperation = 'source-over';
+      ctx2d.shadowBlur = 0;
+      ctx2d.shadowColor = 'transparent';
+      ctx2d.fillStyle = '#000000';
+      ctx2d.strokeStyle = '#000000';
+      return;
+    }
+    ctx2d.globalAlpha = 1;
+    const g = ctx2d.createLinearGradient(ox-OBW/2,0,ox+OBW/2,0);
+    g.addColorStop(0,'rgba(180,60,60,0.9)');
+    g.addColorStop(0.5,'rgba(220,80,80,1)');
+    g.addColorStop(1,'rgba(180,60,60,0.9)');
+    ctx2d.fillStyle = g;
+    ctx2d.fillRect(ox-OBW/2, obsY, OBW, OBH);
+    ctx2d.strokeStyle='rgba(255,180,180,0.3)'; ctx2d.lineWidth=1;
+    ctx2d.beginPath(); ctx2d.moveTo(ox-2,obsY+18); ctx2d.lineTo(ox+5,obsY+65); ctx2d.stroke();
+    ctx2d.beginPath(); ctx2d.moveTo(ox+3,obsY+90); ctx2d.lineTo(ox-4,obsY+145); ctx2d.stroke();
+    ctx2d.strokeStyle='rgba(255,255,255,0.25)'; ctx2d.lineWidth=1;
+    ctx2d.strokeRect(ox-OBW/2, obsY, OBW, OBH);
+    ctx2d.globalAlpha = 1;
+    ctx2d.globalCompositeOperation = 'source-over';
+    ctx2d.shadowBlur = 0;
+    ctx2d.shadowColor = 'transparent';
+    ctx2d.fillStyle = '#000000';
+    ctx2d.strokeStyle = '#000000';
+  }
+
+  function drawFrame(condId, state, t) {
+    const canvas = document.getElementById('cv');
+    if (!canvas) return;
+    const ctx2d = canvas.getContext('2d');
+    ctx2d.clearRect(0,0,W,H);
+
+    const meta = CONDITIONS_META[condId];
+    let cx, cy;
+
+    if (condId === 'C1') {
+      cx = getX_C1(t);
+      cy = CY_CENTER + getWiggleY(t, false, 'C1'); // MOD2: micro-wiggle subtil
+    } else if (condId === 'C2') {
+      cx = t<17 ? getX_C2(t) : (t<22 ? 340+easeOut(Math.min((t-17)/5,1))*55 : 395);
+      cy = CY_CENTER + getWiggleY(t, false, 'C2'); // MOD2: micro-wiggle subtil
+    } else {
+      cx = getX_C3(t);
+      const wig = getWiggleY(t, state.struggling, condId);
+      cy = Math.max(CY_MIN, Math.min(CY_MAX, CY_CENTER + wig));
+    }
+    cx = Math.min(800-CR, Math.max(CR, cx));
+    if (!cy) cy = CY_CENTER;
+
+    // ── 1. FOND — pelouse verte (toute la surface) ───────────────────────────────
+    ctx2d.fillStyle = '#3A6B45';
+    ctx2d.fillRect(0, 0, W, H);
+
+    // Fines lignes verticales pour l'effet terrain de sport
+    ctx2d.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx2d.lineWidth = 1;
+    for (let x = 0; x <= W; x += 80) {
+      ctx2d.beginPath(); ctx2d.moveTo(x,0); ctx2d.lineTo(x,H); ctx2d.stroke();
+    }
+
+    // ── 2. COULOIR — fond sombre + ligne centrale pointillée ────────────────────
+    ctx2d.fillStyle = 'rgba(0,0,0,0.22)';
+    ctx2d.fillRect(0, TY1, W, TY2 - TY1);
+
+    // Ligne centrale (médiane du couloir) — pointillée, subtile
+    ctx2d.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx2d.lineWidth = 1;
+    ctx2d.setLineDash([14, 10]);
+    ctx2d.beginPath(); ctx2d.moveTo(0, CY_CENTER); ctx2d.lineTo(W, CY_CENTER); ctx2d.stroke();
+    ctx2d.setLineDash([]);
+
+    // Lignes blanches des bords du couloir — SOLIDES, pleine opacité, épaisses
+    ctx2d.strokeStyle = '#FFFFFF';
+    ctx2d.lineWidth = 3;
+    ctx2d.globalAlpha = 1;
+    // Ligne haute
+    ctx2d.beginPath(); ctx2d.moveTo(0, TY1); ctx2d.lineTo(W, TY1); ctx2d.stroke();
+    // Ligne basse
+    ctx2d.beginPath(); ctx2d.moveTo(0, TY2); ctx2d.lineTo(W, TY2); ctx2d.stroke();
+
+    // ── 3. LIGNE D'ARRIVÉE — damier blanc/noir ──────────────────────────────────
+    if (state.finishLineFade > 0) {
+      const XF = W - 10;            // position X de la ligne d'arrivée
+      const cellH = 8;              // hauteur d'une case du damier
+      const checkerW = 14;          // largeur du damier
+      const rows = Math.floor((TY2 - TY1) / cellH);
+
+      // Pour C4 : la ligne peut disparaître (fade)
+      // Pour toutes les autres : pulse léger pour attirer l'oeil
+      const pulse = (state.finishLineFade < 1)
+        ? state.finishLineFade                        // fade sortant (C2/C4)
+        : 0.75 + 0.25 * Math.sin(t * Math.PI * 2 * 1.5); // pulse normal
+
+      ctx2d.globalAlpha = pulse;
+
+      // Damier
+      for (let row = 0; row < rows; row++) {
+        ctx2d.fillStyle = (row % 2 === 0) ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.55)';
+        ctx2d.fillRect(XF - checkerW, TY1 + row * cellH, checkerW, cellH);
+      }
+      // Trait blanc vertical sur le bord gauche du damier
+      ctx2d.strokeStyle = '#FFFFFF';
+      ctx2d.lineWidth = 3;
+      ctx2d.beginPath(); ctx2d.moveTo(XF - checkerW, TY1); ctx2d.lineTo(XF - checkerW, TY2); ctx2d.stroke();
+
+      ctx2d.globalAlpha = 1;
+    }
+
+    // ── 4. OBSTACLES (C3/C4 uniquement) ─────────────────────────────────────────
+    if (meta.effort) OBX.forEach((ox, i) => drawObstacle(ctx2d, ox, i, state, t));
+
+    // ── 5. TRAINÉE DU CERCLE (trail) ────────────────────────────────────────────
+    if (!state.struggling) {
+      const trailLen = meta.effort ? 7 : 4;
+      for (let i = 1; i <= trailLen; i++) {
+        const tT = Math.max(0, t - i * 0.04);
+        let tcx, tcy;
+        if (condId === 'C1') { tcx = getX_C1(tT); tcy = CY_CENTER + getWiggleY(tT, false, 'C1'); }
+        else if (condId === 'C2') { tcx = getX_C2(tT); tcy = CY_CENTER + getWiggleY(tT, false, 'C2'); }
+        else {
+          tcx = Math.min(800, C3_XS[Math.min(Math.round(tT * 120), C3_XS.length - 1)]);
+          tcy = Math.max(CY_MIN, Math.min(CY_MAX, CY_CENTER + getWiggleY(tT, false, condId)));
+        }
+        tcx = Math.min(800 - CR, Math.max(CR, tcx));
+        ctx2d.beginPath();
+        ctx2d.arc(tcx, tcy, CR * (1 - i / trailLen) * 0.65, 0, Math.PI * 2);
+        ctx2d.fillStyle = `rgba(255,255,255,${0.18 * (1 - i / trailLen)})`;
+        ctx2d.fill();
+      }
+    }
+
+    // ── 6. CERCLE (runner) — blanc pur via canvas offscreen isolé ────────────────
+    const glowR = CR * 3;
+    const oc = document.createElement('canvas');
+    oc.width = glowR * 2 + 4; oc.height = glowR * 2 + 4;
+    const oc2 = oc.getContext('2d');
+    const ocx = glowR + 2, ocy = glowR + 2;
+    oc2.clearRect(0, 0, oc.width, oc.height);
+    oc2.shadowBlur = 22; oc2.shadowColor = '#FFFFFF';
+    oc2.fillStyle = '#FFFFFF';
+    oc2.beginPath(); oc2.arc(ocx, ocy, CR, 0, Math.PI * 2); oc2.fill();
+    oc2.shadowBlur = 0; oc2.shadowColor = 'transparent';
+    oc2.fillStyle = '#FFFFFF';
+    oc2.beginPath(); oc2.arc(ocx, ocy, CR, 0, Math.PI * 2); oc2.fill();
+    ctx2d.globalAlpha = 1;
+    ctx2d.globalCompositeOperation = 'source-over';
+    ctx2d.shadowBlur = 0; ctx2d.shadowColor = 'transparent';
+    ctx2d.drawImage(oc, cx - ocx, cy - ocy);
+
+    // ── 7. HUD — barre de progression dans le canvas (bas, gauche→droite) ────────
+    _drawHUDOnCanvas(ctx2d, state, condId);
+  }
+
+  // Couleur HUD selon état de la condition
+  function _hudColor(condId, state) {
+    if (condId === 'C1' || condId === 'C3') return '#4ade80'; // succès → vert
+    // Échec : orange pendant la course, rouge une fois l'échec consommé
+    if (state.failSoundFired) return '#E53E3E';
+    return '#facc15';
+  }
+
+  function _drawHUDOnCanvas(ctx2d, state, condId) {
+    const pct   = Math.max(0, Math.min(100, state.hud));
+    const hudH  = 18;
+    const hudY  = H - hudH - 8;          // 8px de marge en bas
+    const hudX  = 20;                    // marge gauche
+    const hudW  = W - 40;               // largeur totale (marge des deux côtés)
+    const fillW = hudW * (pct / 100);   // ← gauche à droite
+
+    // Fond de la barre
+    ctx2d.globalAlpha = 0.55;
+    ctx2d.fillStyle = 'rgba(0,0,0,0.6)';
+    _roundRect(ctx2d, hudX, hudY, hudW, hudH, 4);
+    ctx2d.fill();
+
+    // Remplissage coloré (gauche → droite)
+    if (fillW > 0) {
+      ctx2d.globalAlpha = 1;
+      ctx2d.fillStyle = _hudColor(condId, state);
+      _roundRect(ctx2d, hudX, hudY, fillW, hudH, 4);
+      ctx2d.fill();
+    }
+
+    // Texte pourcentage centré
+    ctx2d.globalAlpha = 1;
+    ctx2d.fillStyle = '#FFFFFF';
+    ctx2d.font = 'bold 11px "Share Tech Mono", monospace';
+    ctx2d.textAlign = 'center';
+    ctx2d.textBaseline = 'middle';
+    ctx2d.fillText(Math.round(pct) + '%', hudX + hudW / 2, hudY + hudH / 2);
+    ctx2d.textAlign = 'left';
+    ctx2d.textBaseline = 'alphabetic';
+    ctx2d.globalAlpha = 1;
+  }
+
+  function _roundRect(ctx2d, x, y, w, h, r) {
+    if (ctx2d.roundRect) { ctx2d.beginPath(); ctx2d.roundRect(x, y, w, h, r); }
+    else {
+      ctx2d.beginPath();
+      ctx2d.moveTo(x + r, y);
+      ctx2d.lineTo(x + w - r, y); ctx2d.arcTo(x + w, y, x + w, y + r, r);
+      ctx2d.lineTo(x + w, y + h - r); ctx2d.arcTo(x + w, y + h, x + w - r, y + h, r);
+      ctx2d.lineTo(x + r, y + h); ctx2d.arcTo(x, y + h, x, y + h - r, r);
+      ctx2d.lineTo(x, y + r); ctx2d.arcTo(x, y, x + r, y, r);
+      ctx2d.closePath();
+    }
+  }
+
+  // ─── HUD drawn on canvas — no DOM elements needed ────────────────────────────
+  function updateHUD(pct) { /* HUD drawn in drawFrame */ }
+
+  // ─── TICK LOOP ────────────────────────────────────────────────────────────────
+  function animTick() {
+    if (!animState || !animState.running) return;
+
+    const now = performance.now();
+    const t = Math.min((now - animState.t0) / 1000, DURATION);
+    animState.t = t;
+
+    const meta = CONDITIONS_META[animState.condId];
+
+    // Struggle detection (C3/C4)
+    if (meta.effort && !animState.c4lineCut) {
+      animState.struggling = isStruggling(t);
+    }
+
+    // Obstacle breakthrough shatter
+    if (meta.effort) {
+      const x = getX_C3(t);
+      OBX.forEach((ox, i) => {
+        if (!animState.impactFired[i] && x > ox + OBW/2 + 3) {
+          animState.impactFired[i] = true;
+          animState.debris[i] = makeDebris(ox);
+          animState.debrisT[i] = t;
+          AudioEngine.playObstacleHit();
+        }
+      });
+    }
+
+    // HUD & sound logic
+    const condId = animState.condId;
+
+    if (condId === 'C1') {
+      animState.hud = Math.min(100, (getX_C1(t)/800)*100);
+      if (!animState.successSoundFired && t >= 39.8) {
+        animState.successSoundFired = true;
+        AudioEngine.playSuccess();
+      }
+      if (animState.hud >= 100 && !animState._ended) {
+        animState._ended = true;
+        animState.running = false;
+        updateHUD(100);
+        drawFrame(condId, animState, t);
+        setTimeout(afterAnimation, 2400);
+        return;
+      }
+
+    } else if (condId === 'C2') {
+      if (t < 17) {
+        animState.hud = (getX_C2(t)/800)*100;
+      } else {
+        if (!animState.fadingFinish) {
+          animState.fadingFinish = true;
+          animState.fadeStart = t;
+          animState.fadeDur = 0.5;
+          animState._hudAtFail = animState.hud;
+          if (!animState.failSoundFired) {
+            animState.failSoundFired = true;
+            AudioEngine.playFailure();
+          }
+        }
+        const dt = t - 17;
+        animState.hud = dt<1.5 ? Math.max(0, animState._hudAtFail*(1-dt/1.5)) : 0;
+        if (dt >= 2.5 && !animState._ended) {
+          animState._ended = true;
+          animState.running = false;
+          updateHUD(0);
+          drawFrame(condId, animState, t);
+          setTimeout(afterAnimation, 400);
+          return;
+        }
+      }
+
+    } else if (condId === 'C3') {
+      animState.hud = Math.min(100, (getX_C3(t)/800)*100);
+      if (!animState.successSoundFired && animState.hud >= 99.5) {
+        animState.successSoundFired = true;
+        AudioEngine.playSuccess();
+      }
+      if (animState.hud >= 100 && !animState._ended) {
+        animState._ended = true;
+        animState.running = false;
+        updateHUD(100);
+        drawFrame(condId, animState, t);
+        setTimeout(afterAnimation, 2400);
+        return;
+      }
+
+    } else if (condId === 'C4') {
+      if (!animState.c4lineCut) {
+        const rawPct = Math.min(100, (getX_C3(t)/800)*100);
+        animState.hud = Math.min(95, rawPct);
+
+        if (animState.hud >= 92 && !animState.c4peakArmed) animState.c4peakArmed = true;
+
+        if (animState.c4peakArmed) {
+          const wig = getWiggleY(t, animState.struggling, 'C4');
+          if (Math.abs(wig) >= 36 && !animState._c4peakHit) animState._c4peakHit = true;
+          if (animState._c4peakHit && Math.abs(wig) < 20) {
+            animState.c4lineCut = true;
+            animState.finishLineFade = 0;
+            animState.hud = 95;
+            animState._hudAtFail = 95;
+            animState._c4cutT = t;
+            if (!animState.failSoundFired) {
+              animState.failSoundFired = true;
+              AudioEngine.playFailure();
+            }
+          }
+        }
+      } else {
+        const dt = t - animState._c4cutT;
+        animState.hud = dt < 1.5 ? Math.max(0, 95*(1-dt/1.5)) : 0;
+        if (dt >= 2.5 && !animState._ended) {
+          animState._ended = true;
+          animState.running = false;
+          updateHUD(0);
+          drawFrame(condId, animState, t);
+          setTimeout(afterAnimation, 400);
+          return;
+        }
+      }
+    }
+
+    // Finish line fade (C2 only)
+    if (animState.fadingFinish) {
+      animState.finishLineFade = Math.max(0, 1 - (t - animState.fadeStart) / animState.fadeDur);
+    }
+
+    // Update effort audio
+    AudioEngine.updateEffort(animState.hud);
+
+    drawFrame(condId, animState, t);
+    updateHUD(animState.hud);
+
+    if (t < DURATION) {
+      animRaf = requestAnimationFrame(animTick);
+    } else {
+      animState.running = false;
+      if (!animState._ended) {
+        animState._ended = true;
+        setTimeout(afterAnimation, 400);
+      }
+    }
+  }
+
+  // ─── RUN / STOP ───────────────────────────────────────────────────────────────
+  async function runAnimation(condId) {
+    if (animRaf) { cancelAnimationFrame(animRaf); animRaf = null; }
+    AudioEngine.stopAll();
+
+    animState = initAnimState(condId);
+
+    try {
+      await AudioEngine.init();
+      AudioEngine.startAmbience(CONDITIONS_META[condId].effort);
+    } catch(e) { console.warn(e); }
+
+    animState.running = true;
+    animState.t0 = performance.now();
+    animRaf = requestAnimationFrame(animTick);
+  }
+
+  function afterAnimation() {
+    if (animRaf) { cancelAnimationFrame(animRaf); animRaf = null; }
+    AudioEngine.stopAll();
+    showQuestionnaire();
+  }
+
+  // ====================================================================================
+  // ==================== QUESTIONNAIRE & SCORING (inchangé) ===========================
+  // ====================================================================================
+  // ── Items D1–D4 (Identification narrative, Cohen 2001) ────────────────────────
+  const I_IDENT = [
+    // D1 — Contagion émotionnelle
+    {id:'d1a', dim:'D1', ar:'وقت الفيديو، حسيت بمشاعر الشخصية كينها مشاعري أنا.', inv:false},
+    {id:'d1b', dim:'D1', ar:'كيف كانت الشخصية تتعدى بصعوبات، كنت أنا زادة نحس بحاجة من داخل.', inv:false},
+    {id:'d1c', dim:'D1', ar:'تفرجت على إلي صار للشخصية من غير ما نحس بمشاعرها.', inv:true},
+    // D2 — Prise de perspective
+    {id:'d2a', dim:'D2', ar:'وقت الفيديو، حاولت نشوف الموقف من منظور الشخصية، كيني أنا في بلاصتها.', inv:false},
+    {id:'d2b', dim:'D2', ar:'وقت الفيديو، حاولت نتخيل شنوة تحب الشخصية وشنوة تحس في داخلها.', inv:false},
+    {id:'d2c', dim:'D2', ar:'في الفيديو، بقيت في منظوري من غير ما نحاول نشوف الأمور من منظور الشخصية.', inv:true},
+    // D3 — Importance / Objectifs
+    {id:'d3a', dim:'D3', ar:'وقت السباق، الوصول للخط ولا الهدف متاعي أنا زادة، ولو لفترة مؤقتة.', inv:false},
+    {id:'d3b', dim:'D3', ar:'إلي كان يصير للشخصية كان يهمني كينو صاير ليا أنا.', inv:false},
+    {id:'d3c', dim:'D3', ar:'النتيجة لخرة متاع الشخصية ما كانتش تهمني برشة.', inv:true},
+    // D4 — Immersion / Frontière
+    {id:'d4a', dim:'D4', ar:'في بعض الأوقات، نسيت إلي أنا قاعد نتفرج جيست في animation.', inv:false},
+    {id:'d4b', dim:'D4', ar:'في بعض اللحظات، حسيت روحي أنا والشخصية ولينا فرد حاجة.', inv:false},
+    {id:'d4c', dim:'D4', ar:'حافظت طوال الوقت على مسافة واضحة بيني وبين الشخصية.', inv:true}
+  ];
+
+  // ── Items intrus (filtre d'attention) — 3 items, 1 inséré aléatoirement par questionnaire ──
+  const I_INTRUS = [
+    {id:'intr1', dim:'INTR', ar:'الفيديو كان واضح بصرياً.', inv:false, intrus:true},
+    {id:'intr2', dim:'INTR', ar:'عجبتني الanimation.', inv:false, intrus:true},
+    {id:'intr3', dim:'INTR', ar:'قعدت مركز فل الفيديوات لكل.', inv:false, intrus:true}
+  ];
+
+  // ── Manipulation Checks (ordre fixe : MC1 → MC2 → MC3* → MC4) ────────────────
+  // * MC3 uniquement affiché pour conditions d'échec (C2, C4)
+  const I_MC = [
+    {id:'mc1', dim:'MC1', ar:'قداش حسيت إلي الشخصية عملت مجهود كبير باش توصل للهدف متاعها؟', type:'likert', inv:false, lo:'ما عملت حتى مجهود', hi:'عملت مجهود كبير برشة'},
+    {id:'mc2', dim:'MC2', ar:'في آخر الفيديو، شنوة صار للشخصية؟', type:'mc', inv:false, opts:[{val:'win',label:'وصلت ونجحت'},{val:'lose',label:'ما وصلتش وفشلت'},{val:'unclear',label:'مش متأكد'}]},
+    // MOD4 : MC3 affiché uniquement en C2 et C4 (conditions d'échec)
+    {id:'mc3', dim:'MC3', ar:'قداش حسيت إلي الشخصية كانت قريبة من الهدف متاعها في آخر السباق؟', type:'likert', inv:false, lo:'بعيدة برشة على الهدف', hi:'كانت على شعرة من الهدف', failOnly:true},
+    // MOD5 : labels MC4 corrigés — gauche=Shakhsiya, droite=Externe
+    {id:'mc4', dim:'MC4', ar:'قداش تعتقد إلي نتيجة السباق كانت بسبب عوامل من برا موش بسبب الشخصية والشخصية ما عندها حتى دخل؟', type:'likert', inv:true, lo:'النتيجة بسبب الشخصية', hi:'النتيجة بسبب عوامل خارجية'}
+  ];
+
+  /**
+   * Mélange les 12 items D1-D4 en respectant 2 contraintes :
+   *  1. Jamais 2 items inversés (inv:true) consécutifs
+   *  2. Jamais 2 items de la même dimension (D1/D2/D3/D4) consécutifs
+   * Puis insère 1 item intrus à une position aléatoire dans la 2e moitié.
+   */
+  function shuffleIdent(arr) {
+    for (let attempt = 0; attempt < 80; attempt++) {
+      const a = shuffle([...arr]);
+      let ok = true;
+      for (let i = 1; i < a.length; i++) {
+        if (a[i].inv && a[i-1].inv) { ok = false; break; }
+        if (a[i].dim === a[i-1].dim) { ok = false; break; }
+      }
+      if (ok) return a;
+    }
+    // Fallback : garantit au moins pas 2 inversés consécutifs
+    for (let attempt = 0; attempt < 40; attempt++) {
+      const a = shuffle([...arr]);
+      let ok = true;
+      for (let i = 1; i < a.length; i++) {
+        if (a[i].inv && a[i-1].inv) { ok = false; break; }
+      }
+      if (ok) return a;
+    }
+    return shuffle([...arr]);
+  }
+
+  function buildQuestItems() {
+    const shuffledD = shuffleIdent([...I_IDENT]);
+    // Choisir 1 item intrus aléatoire (tourne selon le trialIdx pour varier)
+    const intrIdx = APP.trialIdx % I_INTRUS.length;
+    const intrItem = { ...I_INTRUS[intrIdx] };
+    // Insérer l'intrus dans la seconde moitié des items D (positions 6-11)
+    const insertPos = 6 + Math.floor(Math.random() * 6);
+    shuffledD.splice(insertPos, 0, intrItem);
+    return shuffledD; // 13 items : 12 Ident + 1 intrus
+  }
+
+  let qItems=[], qAns={}, isLastQ=false;
+
+  function showQuestionnaire() {
+    isLastQ = (APP.trialIdx >= 3);
+    qAns = {};
+    const identItems = buildQuestItems(); // 12 items + 1 intrus mélangés
+
+    // MOD4: MC3 uniquement pour les conditions d'échec C2 et C4
+    const isFailCond = (APP.currentC === 'C2' || APP.currentC === 'C4');
+    const filteredMC = I_MC.filter(it => !(it.id === 'mc3' && !isFailCond));
+
+    qItems = [...identItems, ...filteredMC];
+
+    // MOD8: Titres personnalisés par numéro de mقطع
+    const qtitles = [
+      'شنوا حسيت او انتي تتفرج فل فيديو لول',
+      'شنوا حسيت او انتي تتفرج فل فيديو الثاني',
+      'شنوا حسيت او انتي تتفرج فل فيديو الثالث',
+      'شنوا حسيت او انتي تتفرج فل فيديو الرابع'
+    ];
+    const lbl = ['المقطع الأول','المقطع الثاني','المقطع الثالث','المقطع الرابع'][APP.trialIdx];
+    document.getElementById('qlbl').textContent = 'أسئلة — ' + lbl;
+    document.getElementById('qtitle').textContent = qtitles[APP.trialIdx];
+
+    // MOD9: Nouvelle consigne
+    const qinstr = document.getElementById('qinstruction');
+    if (qinstr) qinstr.textContent = 'جواب بلي حسيت بيه مفماش إجابة صحيحة ولى غالطة. في كل سؤال، اختار الرقم اللي يمثل رايك: 1 يعني مانيش موافق جملة، و 7 يعني موافق علخر والأرقام اللي في الوسط (من 2 لـ 6) هي درجات متفاوتة حسب إحساسك.';
+
+    const cont = document.getElementById('qitems');
+    cont.innerHTML = '';
+    // Render D1–D4 + intrus (tous en Likert 1-7)
+    identItems.forEach(it => cont.appendChild(buildLikertItem(it, 'مانيش موافق جملة', 'موافق علخر')));
+    // Séparateur visuel avant les Manipulation Checks
+    const sep = document.createElement('hr'); sep.className = 'mc-sep'; cont.appendChild(sep);
+    // Render MC filtrés dans l'ordre : MC1 → MC2 → [MC3 si échec] → MC4
+    filteredMC.forEach(it => {
+      if (it.type==='likert') {
+        // MOD5: labels spéciaux pour MC4
+        const lo = it.id === 'mc4' ? 'النتيجة بسبب الشخصية' : it.lo;
+        const hi = it.id === 'mc4' ? 'النتيجة بسبب عوامل خارجية' : it.hi;
+        cont.appendChild(buildLikertItem(it, lo, hi, it.id === 'mc4'));
+      }
+      else if (it.type==='mc') cont.appendChild(buildMCItem(it));
+    });
+    document.getElementById('openblock').style.display = isLastQ ? 'block' : 'none';
+    document.getElementById('open-ans').value = '';
+    document.getElementById('btn-quest').disabled = true;
+    document.getElementById('qprog').textContent = '0 / ' + qItems.length;
+    const oa = document.getElementById('open-ans');
+    const oaClone = oa.cloneNode(true);
+    oa.parentNode.replaceChild(oaClone, oa);
+    oaClone.addEventListener('input', checkQComplete);
+    goTo('s-quest');
+  }
+
+  // ── Explications tooltip par item (darija) ───────────────────────────────────
+  const TIPS = {
+    d1a: 'يعني وقت اللي تفرجت، حسيت بروحك تأثرت ودخلت في وسط المشاعر اللي قاعدة تحس فيها الشخصية، كينك أنت اللي حاسس بيهم.',
+    d1b: 'يعني وقت اللي الشخصية لقات روحها في وضعية صعيبة، حسيت بوجيعة ولا ضيق في صدرك ولا تأثرت باللي صايرلها.',
+    d1c: 'يعني تفرجت عادي، بقيت بارد وما حسيت بحتى حاجة من ناحية الشخصية ولا من ناحية اللي تعدات بيه.',
+    d2a: 'يعني حاولت تغزر للحكاية بعينين الشخصية وتتخيل روحك في بلاصتها باش تفهم الموقف.',
+    d2b: 'يعني حاولت تفهم التفكير متاع الشخصية وتتخيل شنوة النوايا متاعها وشنوة اللي يدور في مخها.',
+    d2c: 'يعني تفرجت من بعيد وبقيت تخمم بطريقتك أنت، وما حاولتش تحط روحك في بلاصة الشخصية.',
+    d3a: 'يعني في لحظة معينة، وليت تتمنى من قلبك إنو الشخصية توصل للخط، كينو النجاح هذاك متاعك أنت.',
+    d3b: 'يعني النتيجة والظروف اللي تعدات بيهم الشخصية خذيتهم على محمل الجد، كينهم حاجة تخصك.',
+    d3c: 'يعني في لخر، سواء وصلت الشخصية ولا ما وصلتش، الحكاية ما وجعتكش وما كانتش مهمة برشة بالنسبة ليك.',
+    d4a: 'يعني فمة لحظات غطست فيهم في الحكاية لدرجة نسيت اللي هو مجرد فيديو ولا رسوم متحركة.',
+    d4b: 'يعني حسيت برابط قوي برشة مع الشخصية، لدرجة ما عادش فمة فرق كبير بينك وبينها وأنت تتفرج.',
+    d4c: 'يعني بقيت فايق بروحك اللي أنت تتفرج من برا، وبقيت الشخصية بالنسبة ليك مجرد رسم في فيديو.',
+    intr1: 'التصويرة كانت واضحة ومفهومة بالنسبة ليك وإلا لا؟',
+    intr2: 'عجبك الستيل متاع الرسوم المتحركة وطريقة الخدمة متاع الفيديو؟',
+    intr3: 'هل بقيت منتبه ومركز مع كل فيديو تفرجت فيه من الأول للأخر؟',
+    mc1: 'أعطينا رايك في قداش الشخصية تعبت وحاولت وبذلت جهد باش تخلط للي تحب عليه.',
+    mc2: 'ثبت معانا، في اللحظة الأخيرة الشخصية نجحت ووصلت، ولا فشلت، ولا ما عرفتش شنوة صار؟',
+    mc3: 'يعني في اللخر بالكل، الشخصية كانت قريبة برشة من الهدف (حاجة بسيطة وتوصل) ولا كانت بعيدة؟',
+    mc4: 'يعني النتيجة اللي صارت في لخر، هل هي بسبب الحظ ولا ظروف خارجية، ولا الشخصية هي اللي كانت مسؤولة عليها؟'
+  };
+
+  // ── Génère le HTML du tooltip pour un item ───────────────────────────────────
+  function tipHtml(id) {
+    const txt = TIPS[id];
+    if (!txt) return '';
+    return `<span class="tip-wrap">
+      <span class="tip-icon" aria-label="شرح" role="tooltip" tabindex="0">ℹ</span>
+      <span class="tip-bubble">${txt}</span>
+    </span>`;
+  }
+
+  function buildLikertItem(it, loLabel, hiLabel, noMiddle) {
+    const d = document.createElement('div');
+    d.className = 'litem'; d.id = 'iw-'+it.id;
+    // MOD10: محايد supprimé de toutes les échelles Likert
+    d.innerHTML = `
+      <div class="lq">
+        <span class="lq-text">${it.ar}</span>${tipHtml(it.id)}
+      </div>
+      <div class="lscale">${[1,2,3,4,5,6,7].map(v =>
+        `<button class="lbtn" onclick="pickQ('${it.id}',${v},this)">${v}</button>`
+      ).join('')}</div>
+      <div class="llabels"><span>${loLabel}</span><span>${hiLabel}</span></div>`;
+    return d;
+  }
+
+  function buildMCItem(it) {
+    const d = document.createElement('div');
+    d.className = 'litem'; d.id = 'iw-'+it.id;
+    d.innerHTML = `
+      <div class="lq">
+        <span class="lq-text">${it.ar}</span>${tipHtml(it.id)}
+      </div>
+      <div class="mc-opts">${it.opts.map(opt =>
+        `<div class="mc-opt" onclick="pickMC('${it.id}','${opt.val}',this)">${opt.label}</div>`
+      ).join('')}</div>`;
+    return d;
+  }
+  window.pickQ = function(id, val, btn) {
+    const wrap = document.getElementById('iw-'+id);
+    wrap.querySelectorAll('.lbtn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel'); wrap.classList.add('ok');
+    qAns[id] = val; checkQComplete();
+  };
+  window.pickMC = function(id, val, el) {
+    const wrap = document.getElementById('iw-'+id);
+    wrap.querySelectorAll('.mc-opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel'); wrap.classList.add('ok');
+    qAns[id] = val; checkQComplete();
+  };
+  function checkQComplete() {
+    const done = Object.keys(qAns).length;
+    const total = qItems.length;
+    document.getElementById('qprog').textContent = done + ' / ' + total;
+    const openEl = document.getElementById('open-ans');
+    const allText = !isLastQ || (openEl && openEl.value.trim().length > 0);
+    document.getElementById('btn-quest').disabled = !(done >= total && allText);
+  }
+  function nextAfterQuest() {
+    APP.answers[APP.currentC] = { ...qAns };
+    if (isLastQ) {
+      const openEl = document.getElementById('open-ans');
+      APP.openText = openEl ? openEl.value.trim() : '';
+      sendData();
+    } else {
+      startDistractor();
+    }
+  }
+  function dimScore(cond, dim) {
+    const d = APP.answers[cond] || {};
+    const items = I_IDENT.filter(it => it.dim === dim); // I_IDENT n'inclut pas les intrus
+    const vals = items.map(it => { let raw = d[it.id]; if (raw == null) return null; return it.inv ? (8 - raw) : raw; }).filter(x => x !== null);
+    return vals.length === items.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) : null;
+  }
+  function idTotal(cond) {
+    const dims = ['D1','D2','D3','D4'].map(d => parseFloat(dimScore(cond, d)));
+    if (dims.some(isNaN)) return null;
+    return (dims.reduce((a, b) => a + b, 0) / dims.length).toFixed(2);
+  }
+  function mc(cond, id) { return (APP.answers[cond] || {})[id] ?? null; }
+  function mc4inv(cond) { const raw = mc(cond, 'mc4'); return raw != null ? (8 - raw) : null; }
+  // Récupère la réponse à l'item intrus pour une condition (pour détection inattention)
+  function intrScore(cond) {
+    const d = APP.answers[cond] || {};
+    const found = I_INTRUS.find(it => d[it.id] != null);
+    return found ? `${found.id}:${d[found.id]}` : null;
+  }
+
+  // ==================== DATA SENDING (inchangé) ====================
+  function sendData() {
+    goTo('s-send');
+    const CONDS = ['C1','C2','C3','C4'];
+    const perCond = (col, fn) => Object.fromEntries(CONDS.map(c => [col + '_' + c, fn(c)]));
+    const payload = {
+      Timestamp: new Date().toISOString(),
+      Ordre_conditions: APP.order.map(i => CONDS[i]).join(','),
+      Pseudo: APP.demo.pseudo || '',
+      Age: APP.demo.age,
+      Sexe: APP.demo.sex,
+      Niveau_etudes: APP.demo.edu,
+      ...perCond('D1', c => dimScore(c, 'D1')),
+      ...perCond('D2', c => dimScore(c, 'D2')),
+      ...perCond('D3', c => dimScore(c, 'D3')),
+      ...perCond('D4', c => dimScore(c, 'D4')),
+      ...perCond('ID', c => idTotal(c)),
+      ...Object.fromEntries(CONDS.flatMap(c => I_IDENT.map(it => [`raw_${it.id}_${c}`, mc(c, it.id)]))),
+      ...perCond('MC1_effort', c => mc(c, 'mc1')),
+      ...perCond('MC2_issue', c => mc(c, 'mc2')),
+      ...perCond('MC3_nearmiss', c => mc(c, 'mc3')),
+      ...perCond('MC4_attribution', c => mc4inv(c)),
+      ...perCond('INTR_filtre', c => intrScore(c)),
+      distractor_1: APP.distractors[0] ? JSON.stringify(APP.distractors[0]) : null,
+      distractor_2: APP.distractors[1] ? JSON.stringify(APP.distractors[1]) : null,
+      distractor_3: APP.distractors[2] ? JSON.stringify(APP.distractors[2]) : null,
+      Rappel_qualitatif: APP.openText,
+      JSON_brut: JSON.stringify(APP.answers)
+    };
+
+    const formBody = new URLSearchParams({ data: JSON.stringify(payload) }).toString();
+
+    function attempt(n) {
+      fetch(CFG.SHEETS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formBody,
+        mode: 'no-cors'
+      })
+      .then(() => {
+        document.getElementById('send-icon').textContent = '✅';
+        document.getElementById('send-title').textContent = 'تم الإرسال بنجاح!';
+        document.getElementById('send-msg').textContent = 'شكراً على مشاركتك. تم حفظ بياناتك.';
+        document.getElementById('sdot').style.cssText = 'background:#27ae60;animation:none';
+        setTimeout(() => {
+          const skipDebrief = false; // mettre true pour sauter le débriefing (tests)
+          if (skipDebrief) {
+            goTo('s-end');
+          } else {
+            goTo('s-debrief');
+            dbInit();
+          }
+        }, 1500);
+      })
+      .catch(err => {
+        console.warn('Erreur envoi:', err);
+        if (n < 3) {
+          document.getElementById('send-msg').innerHTML = `⚠️ إعادة المحاولة… (${n+1}/3)`;
+          setTimeout(() => attempt(n + 1), 2000);
+        } else {
+          document.getElementById('send-icon').textContent = '⚠️';
+          document.getElementById('send-title').textContent = 'تعذّر الإرسال';
+          document.getElementById('send-msg').innerHTML = `تعذّر الاتصال. الرجاء حفظ هذا الرمز: <strong>${Date.now()}</strong><br>وتواصل مع الباحث.`;
+          document.getElementById('sdot').style.cssText = 'background:#e74c3c;animation:none';
+          const skipDebrief = false;
+          setTimeout(() => {
+            if (skipDebrief) goTo('s-end');
+            else { goTo('s-debrief'); dbInit(); }
+          }, 4000);
+        }
+      });
+    }
+    attempt(1);
+  }
+
+  // ==================== DISTRACTOR & COUNTDOWN (inchangé) ====================
+  let dData = null, _cbToken = 0;
+  function startDistractor() {
+    document.getElementById('dist-ans').style.display='none';
+    document.getElementById('dist-trans').style.display='none';
+    document.getElementById('dist-input').value='';
+    document.getElementById('dist-cbar').style.width='100%';
+    goTo('s-dist');
+    const count=5+Math.floor(Math.random()*8);
+    const types=['sq','tri','star'];
+    const items=Array.from({length:count},()=>types[Math.floor(Math.random()*3)]);
+    dData={items, correct:items.filter(t=>t==='tri').length};
+    const cont=document.getElementById('dist-shapes');
+    cont.innerHTML='';
+    items.forEach((t,i)=>{
+      const el=document.createElement('div');
+      el.className='ds ds-'+t;
+      el.style.animationDelay=(i*55)+'ms';
+      cont.appendChild(el);
+    });
+    countdownBar('dist-cbar','dist-status',CFG.DT_SHOW,()=>{
+      cont.innerHTML='';
+      document.getElementById('dist-ans').style.display='block';
+    });
+  }
+  function confirmDistractor() {
+    const val=parseInt(document.getElementById('dist-input').value)||0;
+    APP.distractors.push({ items:dData.items, correct:dData.correct, answered:val });
+    document.getElementById('dist-ans').style.display='none';
+    document.getElementById('dist-trans').style.display='block';
+    document.getElementById('trans-fill').style.width='100%';
+    countdownBar('trans-fill','trans-timer',CFG.DT_TRANS,()=>{ APP.trialIdx++; runTrial(); });
+  }
+  function countdownBar(barId,labelId,totalMs,cb) {
+    const myToken=++_cbToken;
+    const bar=document.getElementById(barId);
+    const lbl=document.getElementById(labelId);
+    const start=Date.now();
+    const tick=setInterval(()=>{
+      if (myToken!==_cbToken) { clearInterval(tick); return; }
+      const el=Date.now()-start;
+      const rem=Math.max(0,totalMs-el);
+      bar.style.width=(rem/totalMs*100)+'%';
+      lbl.textContent=Math.ceil(rem/1000)+'s';
+      if (el>=totalMs) { clearInterval(tick); cb(); }
+    },80);
+  }
+
+  // ==================== TOOLTIP — Support mobile & clavier ====================
+  document.addEventListener('click', function(e) {
+    const icon = e.target.closest('.tip-icon');
+    if (icon) {
+      e.stopPropagation();
+      const wrap = icon.closest('.tip-wrap');
+      const bubble = wrap.querySelector('.tip-bubble');
+      const isOpen = bubble.classList.contains('tip-show');
+      document.querySelectorAll('.tip-bubble.tip-show').forEach(b => {
+        b.classList.remove('tip-show');
+        b.closest('.tip-wrap').querySelector('.tip-icon').classList.remove('tip-open');
+      });
+      if (!isOpen) { bubble.classList.add('tip-show'); icon.classList.add('tip-open'); }
+      return;
+    }
+    // Clic ailleurs → fermer tous
+    document.querySelectorAll('.tip-bubble.tip-show').forEach(b => {
+      b.classList.remove('tip-show');
+      b.closest('.tip-wrap')?.querySelector('.tip-icon')?.classList.remove('tip-open');
+    });
+  });
+  document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('tip-icon')) {
+      e.preventDefault(); e.target.click();
+    }
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.tip-bubble.tip-show').forEach(b => {
+        b.classList.remove('tip-show');
+        b.closest('.tip-wrap')?.querySelector('.tip-icon')?.classList.remove('tip-open');
+      });
+    }
+  });
+
+  // ==================== DEBRIEF LOGIC ====================
+  let _dbCurrent = 1;
+  const DB_TOTAL = 5;
+
+  function dbInit() {
+    _dbCurrent = 1;
+    // Reset all screens
+    for (let i = 1; i <= DB_TOTAL; i++) {
+      const el = document.getElementById('dbs-' + i);
+      if (el) { el.classList.remove('db-active'); }
+    }
+    document.getElementById('dbs-1').classList.add('db-active');
+    dbUpdatePips();
+    // Reveal second line in screen 1 after 1 second
+    setTimeout(() => {
+      const r = document.getElementById('dbs1-reveal');
+      if (r) r.classList.add('shown');
+    }, 900);
+  }
+
+  function dbUpdatePips() {
+    for (let i = 0; i < DB_TOTAL; i++) {
+      const pip = document.getElementById('dbpip-' + i);
+      if (!pip) continue;
+      pip.classList.remove('db-pip-done', 'db-pip-active');
+      if (i + 1 < _dbCurrent) pip.classList.add('db-pip-done');
+      else if (i + 1 === _dbCurrent) pip.classList.add('db-pip-active');
+    }
+  }
+
+  function dbNext() {
+    const current = document.getElementById('dbs-' + _dbCurrent);
+    if (current) current.classList.remove('db-active');
+    _dbCurrent++;
+    if (_dbCurrent > DB_TOTAL) { dbFinish(); return; }
+    const next = document.getElementById('dbs-' + _dbCurrent);
+    if (next) {
+      next.classList.add('db-active');
+      // Force re-trigger animation
+      void next.offsetWidth;
+    }
+    dbUpdatePips();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function dbFinish() {
+    goTo('s-end');
+  }
+
+
+  (function(){
+    let checkAnimDone=false, checkAudioDone=false;
+    function updateContinueBtn() {
+      const btn=document.getElementById('check-continue-btn');
+      if (btn) btn.disabled=!checkAnimDone;
+    }
+    let checkRaf;
+    window.startCheckAnim=function() {
+      if (checkRaf) cancelAnimationFrame(checkRaf);
+      const cv=document.getElementById('check-cv');
+      if (!cv) return;
+      const ctx=cv.getContext('2d');
+      const W=500,H=120,CR=14,Y=H/2,X0c=CR+10,XFc=W-CR-10,dur=5000,start=performance.now();
+      function draw(now) {
+        const t=Math.min((now-start)/dur,1);
+        ctx.clearRect(0,0,W,H);
+        ctx.fillStyle='#3A6B45'; ctx.fillRect(0,0,W,H);
+        ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(0,H*0.2); ctx.lineTo(W,H*0.2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,H*0.8); ctx.lineTo(W,H*0.8); ctx.stroke();
+        const pulse=0.5+0.5*Math.sin(now*0.008);
+        ctx.strokeStyle=`rgba(255,255,255,${pulse})`; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(XFc,H*0.1); ctx.lineTo(XFc,H*0.9); ctx.stroke();
+        const cx=X0c+(XFc-X0c)*t;
+        ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(cx,Y,CR,0,Math.PI*2); ctx.fill();
+        if (t<1) checkRaf=requestAnimationFrame(draw);
+        else {
+          document.getElementById('check-anim-icon').textContent='✅';
+          document.getElementById('check-anim-btns').style.display='flex';
+        }
+      }
+      checkRaf=requestAnimationFrame(draw);
+    };
+    window.checkAnimOk=function() {
+      checkAnimDone=true;
+      document.getElementById('check-anim-icon').textContent='✅';
+      document.getElementById('check-anim-btns').style.display='none';
+      const audioCard=document.getElementById('check-audio-card');
+      audioCard.style.opacity='1'; audioCard.style.pointerEvents='all';
+      updateContinueBtn();
+    };
+    window.checkAnimRetry=function() {
+      document.getElementById('check-anim-icon').textContent='⏳';
+      document.getElementById('check-anim-btns').style.display='none';
+      startCheckAnim();
+    };
+    window.checkPlaySound=function() {
+      try {
+        const ac = getAudioCtx();
+        if (ac.state === 'suspended') ac.resume();
+        const osc=ac.createOscillator(); const g=ac.createGain();
+        osc.frequency.value=440; osc.type='sine';
+        g.gain.setValueAtTime(0.3,ac.currentTime);
+        g.gain.linearRampToValueAtTime(0,ac.currentTime+0.6);
+        osc.connect(g); g.connect(ac.destination);
+        osc.start(); osc.stop(ac.currentTime+0.65);
+        document.getElementById('check-audio-icon').textContent='🔊';
+        document.getElementById('check-audio-ok-btn').style.display='inline-flex';
+        document.getElementById('check-audio-msg').textContent='سمعت صوت؟ اضغط "سمعته مليح" باش تكمّل';
+      } catch(e) {
+        document.getElementById('check-audio-msg').textContent='الصوت ما خدمش — يمكنك تكمّل بدونه';
+        document.getElementById('check-audio-ok-btn').style.display='inline-flex';
+        document.getElementById('check-audio-ok-btn').textContent='✅ كمّل بدون صوت';
+      }
+    };
+    window.checkAudioOk=function() {
+      checkAudioDone=true;
+      document.getElementById('check-audio-icon').textContent='✅';
+      document.getElementById('check-audio-ok-btn').style.display='none';
+      document.getElementById('check-audio-msg').textContent='';
+      updateContinueBtn();
+    };
+    const origGoTo=window.goTo;
+    window.goTo=function(id) {
+      if (origGoTo) origGoTo(id);
+      if (id==='s-check'||id==='check') startCheckAnim();
+    };
+    if (document.readyState==='complete'||document.readyState==='interactive') setTimeout(startCheckAnim,100);
+    else window.addEventListener('DOMContentLoaded',startCheckAnim);
+  })();
+
+  // ══════════════════════════════════════════════════════════════════════════════
+  // ██  MODE CHERCHEUR — Panneau scores en temps réel                         ██
+  // ██  Activation : taper "scores" + Entrée  OU  5 clics rapides sur le logo ██
+  // ══════════════════════════════════════════════════════════════════════════════
+  (function () {
+
+    // ── Activation via frappe clavier : buffer "scores" + Entrée ────────────────
+    let _kbuf = '';
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        if (_kbuf.toLowerCase() === 'scores') admToggle();
+        _kbuf = '';
+      } else if (e.key.length === 1) {
+        _kbuf += e.key;
+        if (_kbuf.length > 10) _kbuf = _kbuf.slice(-10);
+      } else {
+        _kbuf = '';
+      }
+    });
+
+    // ── Activation via 5 clics rapides sur le logo ───────────────────────────────
+    let _logoClicks = 0, _logoTimer = null;
+    const logo = document.querySelector('.hdr-logo');
+    if (logo) {
+      logo.style.cursor = 'default';
+      logo.addEventListener('click', function () {
+        _logoClicks++;
+        clearTimeout(_logoTimer);
+        if (_logoClicks >= 5) { _logoClicks = 0; admToggle(); return; }
+        _logoTimer = setTimeout(() => { _logoClicks = 0; }, 1200);
+      });
+    }
+
+    // ── Toggle panneau ────────────────────────────────────────────────────────────
+    function admToggle() {
+      const p = document.getElementById('adm-panel');
+      if (!p) return;
+      const visible = p.style.display !== 'none';
+      p.style.display = visible ? 'none' : 'block';
+      if (!visible) admRefresh();
+    }
+
+    // ── Calcul des scores (miroir exact de dimScore/idTotal) ─────────────────────
+    function _dimScore(cond, dim) {
+      if (typeof dimScore === 'function') return dimScore(cond, dim);
+      // Fallback autonome si dimScore n'est pas encore défini
+      const d = (typeof APP !== 'undefined' ? APP.answers[cond] : null) || {};
+      const items = (typeof I_IDENT !== 'undefined' ? I_IDENT : []).filter(it => it.dim === dim);
+      const vals = items.map(it => {
+        let raw = d[it.id];
+        if (raw == null) return null;
+        return it.inv ? (8 - raw) : raw;
+      }).filter(x => x !== null);
+      return vals.length === items.length
+        ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2)
+        : null;
+    }
+
+    function _idTotal(cond) {
+      if (typeof idTotal === 'function') return idTotal(cond);
+      const dims = ['D1', 'D2', 'D3', 'D4'].map(d => parseFloat(_dimScore(cond, d)));
+      if (dims.some(isNaN)) return null;
+      return (dims.reduce((a, b) => a + b, 0) / dims.length).toFixed(2);
+    }
+
+    function _mc(cond, id) {
+      if (typeof APP === 'undefined') return null;
+      return (APP.answers[cond] || {})[id] ?? null;
+    }
+
+    // ── Construire le snapshot complet ───────────────────────────────────────────
+    function buildSnapshot() {
+      if (typeof APP === 'undefined') return null;
+      const CONDS = ['C1', 'C2', 'C3', 'C4'];
+      const snap = {
+        ts: new Date().toLocaleTimeString(),
+        currentCond: APP.currentC || '—',
+        order: APP.order ? APP.order.map(i => CONDS[i]).join(' → ') : '—',
+        trialIdx: APP.trialIdx ?? '—',
+        demo: APP.demo || {},
+        conds: {}
+      };
+      CONDS.forEach(c => {
+        const answered = APP.answers[c] && Object.keys(APP.answers[c]).length > 0;
+        snap.conds[c] = {
+          answered,
+          D1: _dimScore(c, 'D1'),
+          D2: _dimScore(c, 'D2'),
+          D3: _dimScore(c, 'D3'),
+          D4: _dimScore(c, 'D4'),
+          ID: _idTotal(c),
+          MC1: _mc(c, 'mc1'),
+          MC2: _mc(c, 'mc2'),
+          MC3: _mc(c, 'mc3'),
+          MC4: _mc(c, 'mc4'),
+          raw: APP.answers[c] || {}
+        };
+      });
+      return snap;
+    }
+
+    // ── Rendu HTML du panneau ─────────────────────────────────────────────────────
+    function admRefresh() {
+      const body = document.getElementById('adm-body');
+      if (!body) return;
+      const s = buildSnapshot();
+      if (!s) { body.innerHTML = '<p style="color:#ff4444;text-align:center;padding:12px">APP non initialisée</p>'; return; }
+
+      const CONDS = ['C1', 'C2', 'C3', 'C4'];
+      const condLabels = { C1: 'Succès facile', C2: 'Échec passif', C3: 'Succès héroïque', C4: 'Échec héroïque ★' };
+
+      const neon = '#00ff88', gold = '#ffd54f', dim = '#7a9a7e', red = '#ff4444', white = '#e8f0e9';
+
+      function row(label, val, color) {
+        const c = color || (val === null || val === '—' ? dim : white);
+        return `<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05);">
+          <span style="color:${dim}">${label}</span>
+          <span style="color:${c};font-weight:700">${val ?? '<em style="color:'+dim+'">n/a</em>'}</span>
+        </div>`;
+      }
+
+      function condBlock(c) {
+        const d = s.conds[c];
+        const isCurrent = c === s.currentCond;
+        const borderColor = isCurrent ? neon : 'rgba(255,255,255,.1)';
+        const bg = isCurrent ? 'rgba(0,255,136,.06)' : 'transparent';
+        const idColor = d.ID ? (parseFloat(d.ID) >= 5 ? neon : parseFloat(d.ID) >= 3 ? gold : red) : dim;
+        return `
+          <div style="border:1px solid ${borderColor};border-radius:8px;padding:10px 12px;margin-bottom:10px;background:${bg};">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="color:${isCurrent ? neon : white};font-size:12px;font-weight:700;">${c} ${isCurrent ? '← EN COURS' : ''}</span>
+              <span style="color:${dim};font-size:9px;">${condLabels[c]}</span>
+            </div>
+            ${!d.answered
+              ? `<p style="color:${dim};font-size:10px;margin:4px 0;">Pas encore répondu</p>`
+              : `
+              <div style="background:rgba(0,255,136,.05);border-radius:6px;padding:8px 10px;margin-bottom:8px;">
+                ${row('ID TOTAL', d.ID ? '★ ' + d.ID : null, idColor)}
+                ${row('D1 Contagion émo.', d.D1)}
+                ${row('D2 Perspective', d.D2)}
+                ${row('D3 Absorption', d.D3)}
+                ${row('D4 Immersion', d.D4)}
+              </div>
+              <div style="background:rgba(255,213,79,.04);border-radius:6px;padding:8px 10px;">
+                ${row('MC1 Effort (1-7)', d.MC1)}
+                ${row('MC2 Issue', d.MC2 ? (d.MC2 === 'win' ? '✅ win' : d.MC2 === 'lose' ? '❌ lose' : '❓ unclear') : null)}
+                ${row('MC3 Near-miss (1-7)', d.MC3)}
+                ${row('MC4 Attribution (inv)', d.MC4 !== null ? (8 - d.MC4).toFixed(0) + ' (brut: ' + d.MC4 + ')' : null)}
+              </div>`
+            }
+          </div>`;
+      }
+
+      body.innerHTML = `
+        <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(0,255,136,.2);">
+          ${row('Mise à jour', s.ts, neon)}
+          ${row('Essai en cours', `${s.trialIdx !== '—' ? parseInt(s.trialIdx)+1 : '—'} / 4`)}
+          ${row('Ordre conditions', s.order)}
+          ${row('Âge', s.demo.age || '—')} 
+          ${row('Sexe', s.demo.sex || '—')}
+        </div>
+        ${CONDS.map(c => condBlock(c)).join('')}
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,255,136,.15);font-size:9px;color:${dim};text-align:center;">
+          Auto-refresh: cliquer ↻ ou rouvrir le panneau
+        </div>`;
+    }
+
+    // ── Exports ───────────────────────────────────────────────────────────────────
+    function admCopyJSON() {
+      const s = buildSnapshot();
+      const txt = JSON.stringify(s, null, 2);
+      navigator.clipboard.writeText(txt).then(() => {
+        _flash('JSON copié ✓');
+      }).catch(() => {
+        prompt('Copier manuellement :', txt);
+      });
+    }
+
+    function admCopyCSV() {
+      const s = buildSnapshot();
+      if (!s) return;
+      const CONDS = ['C1', 'C2', 'C3', 'C4'];
+      const headers = ['Cond', 'D1', 'D2', 'D3', 'D4', 'ID', 'MC1', 'MC2', 'MC3', 'MC4_inv'];
+      const rows = CONDS.map(c => {
+        const d = s.conds[c];
+        return [c, d.D1, d.D2, d.D3, d.D4, d.ID, d.MC1, d.MC2,
+          d.MC3, d.MC4 !== null ? (8 - d.MC4) : ''].join('\t');
+      });
+      const csv = [headers.join('\t'), ...rows].join('\n');
+      navigator.clipboard.writeText(csv).then(() => {
+        _flash('CSV copié ✓ (coller dans Sheets)');
+      }).catch(() => {
+        prompt('Copier manuellement :', csv);
+      });
+    }
+
+    function _flash(msg) {
+      const body = document.getElementById('adm-body');
+      if (!body) return;
+      const toast = document.createElement('div');
+      toast.textContent = msg;
+      toast.style.cssText = 'position:fixed;bottom:80px;right:18px;background:#00ff88;color:#000;padding:8px 16px;border-radius:6px;font-family:monospace;font-size:12px;font-weight:700;z-index:100000;transition:opacity .4s;';
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 1800);
+    }
+
+    // ── Exposition globale ────────────────────────────────────────────────────────
+    window.admRefresh = admRefresh;
+    window.admCopyJSON = admCopyJSON;
+    window.admCopyCSV = admCopyCSV;
+    window.copyScoresToClipboard = admCopyJSON; // alias demandé dans le brief
+    window.admToggle = admToggle;
+
+    // Auto-refresh toutes les 3s quand panneau visible
+    setInterval(() => {
+      const p = document.getElementById('adm-panel');
+      if (p && p.style.display !== 'none') admRefresh();
+    }, 3000);
+
+  })();
+</script>
+</body>
+</html>
